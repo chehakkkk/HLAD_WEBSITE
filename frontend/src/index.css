@@ -1,19 +1,24 @@
 :root {
-  --text: #4a4a59;
-  --text-h: #1f1f2b;
-  --bg: #f5f4f1;
-  --card-bg: #fffcf7;
-  --panel-bg: #f4efe5;
-  --nav-bg: rgba(255, 252, 247, 0.92);
-  --input-bg: #fffdf9;
-  --border: #ddd4c6;
-  --accent: #7b2f2f;
-  --accent-strong: #652626;
-  --accent-soft: rgba(123, 47, 47, 0.1);
-  --accent-border: rgba(123, 47, 47, 0.35);
-  --shadow:
-    rgba(31, 31, 43, 0.14) 0 12px 24px -16px,
-    rgba(31, 31, 43, 0.07) 0 8px 16px -10px;
+  --text: #4e4644;
+  --text-h: #241b1a;
+  --bg: #f8f2e8;
+  --card-bg: #fffbf4;
+  --panel-bg: #f2e5d2;
+  --glass-bg: rgba(255, 252, 245, 0.7);
+  --input-bg: #fffaf2;
+  --border: #dcc8ad;
+  --accent: #7f1d1d;
+  --accent-dark: #5f1414;
+  --accent-soft: rgba(127, 29, 29, 0.12);
+  --accent-border: rgba(127, 29, 29, 0.4);
+  --saffron: #d97706;
+  --gold: #d4a72c;
+  --shadow-soft:
+    rgba(36, 27, 26, 0.18) 0 12px 26px -18px,
+    rgba(36, 27, 26, 0.08) 0 8px 16px -12px;
+  --shadow-strong:
+    rgba(36, 27, 26, 0.26) 0 20px 35px -18px,
+    rgba(36, 27, 26, 0.12) 0 12px 24px -12px;
 
   --sans: 'Noto Sans Devanagari', 'Mangal', 'Segoe UI', Arial, sans-serif;
   --heading: 'Noto Serif Devanagari', 'Nirmala UI', Georgia, serif;
@@ -35,27 +40,59 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #cbc8d1;
-    --text-h: #f4f0ff;
-    --bg: #171521;
-    --card-bg: #211e2d;
-    --panel-bg: #2a2437;
-    --nav-bg: rgba(33, 30, 45, 0.9);
-    --input-bg: #2d2740;
-    --border: #3e3753;
-    --accent: #b4714d;
-    --accent-strong: #95563b;
-    --accent-soft: rgba(180, 113, 77, 0.2);
-    --accent-border: rgba(180, 113, 77, 0.45);
-    --shadow:
-      rgba(0, 0, 0, 0.45) 0 10px 20px -8px,
-      rgba(0, 0, 0, 0.25) 0 6px 12px -8px;
+    --text: #e4ddd8;
+    --text-h: #fff7ec;
+    --bg: #141012;
+    --card-bg: #231a1b;
+    --panel-bg: #2f2325;
+    --glass-bg: rgba(47, 35, 37, 0.74);
+    --input-bg: #2f2425;
+    --border: #50393a;
+    --accent: #f59e0b;
+    --accent-dark: #d97706;
+    --accent-soft: rgba(245, 158, 11, 0.18);
+    --accent-border: rgba(245, 158, 11, 0.44);
+    --shadow-soft:
+      rgba(0, 0, 0, 0.5) 0 12px 24px -12px,
+      rgba(0, 0, 0, 0.35) 0 8px 18px -12px;
+    --shadow-strong:
+      rgba(0, 0, 0, 0.65) 0 20px 35px -14px,
+      rgba(0, 0, 0, 0.45) 0 14px 24px -12px;
   }
+}
+
+body[data-theme='light'] {
+  color-scheme: light;
+}
+
+body[data-theme='dark'] {
+  color-scheme: dark;
+  --text: #e4ddd8;
+  --text-h: #fff7ec;
+  --bg: #141012;
+  --card-bg: #231a1b;
+  --panel-bg: #2f2325;
+  --glass-bg: rgba(47, 35, 37, 0.74);
+  --input-bg: #2f2425;
+  --border: #50393a;
+  --accent: #f59e0b;
+  --accent-dark: #d97706;
+  --accent-soft: rgba(245, 158, 11, 0.18);
+  --accent-border: rgba(245, 158, 11, 0.44);
+  --shadow-soft:
+    rgba(0, 0, 0, 0.5) 0 12px 24px -12px,
+    rgba(0, 0, 0, 0.35) 0 8px 18px -12px;
+  --shadow-strong:
+    rgba(0, 0, 0, 0.65) 0 20px 35px -14px,
+    rgba(0, 0, 0, 0.45) 0 14px 24px -12px;
 }
 
 body {
   margin: 0;
-  background: radial-gradient(circle at 20% 10%, rgba(123, 47, 47, 0.06), transparent 30%),
+  scroll-behavior: smooth;
+  background:
+    radial-gradient(circle at 15% 8%, rgba(212, 167, 44, 0.16), transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(127, 29, 29, 0.16), transparent 32%),
     var(--bg);
 }
 
