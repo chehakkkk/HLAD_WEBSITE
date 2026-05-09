@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useClub } from '../context/useClub'
 
 
@@ -69,41 +69,61 @@ function HomePage() {
       {/* ══════════════════════════════════════
           HERO — Cinematic
       ══════════════════════════════════════ */}
-      <section className="hero-cinematic" ref={heroRef}>
-
-        {/* Background orbs */}
-        <div className="hero-bg-orbs" aria-hidden="true">
-          <div className="hero-orb hero-orb-1" style={{ transform: `translateY(${heroOffset * 0.08}px)` }} />
-          <div className="hero-orb hero-orb-2" style={{ transform: `translateY(${heroOffset * 0.05}px)` }} />
-          <div className="hero-orb hero-orb-3" style={{ transform: `translateY(${heroOffset * 0.03}px)` }} />
+        <section className="hero-cinematic" ref={heroRef}>
+        {/* Ambient orbs */}
+        <div className="hero-orbs" aria-hidden="true">
+          <div className="hero-orb hero-orb-1" style={{ transform: `translate(${heroOffset * 0.04}px, ${heroOffset * 0.06}px)` }} />
+          <div className="hero-orb hero-orb-2" style={{ transform: `translateY(${heroOffset * 0.03}px)` }} />
+          <div className="hero-orb hero-orb-3" style={{ transform: `translateY(${heroOffset * -0.02}px)` }} />
         </div>
 
-        {/* Floating ornaments */}
-        <div className="hero-ornaments" aria-hidden="true">
-          <span className="ornament">पुस्तक</span>
-          <span className="ornament">काव्य</span>
-          <span className="ornament">स्याही</span>
-          <span className="ornament">छंद</span>
-          <span className="ornament">रस</span>
+        {/* Floating Devanagari letters */}
+        <div className="hero-letters" aria-hidden="true">
+          {['अ','क','स','ह','र','म','न','प'].map((ch) => (
+            <span className="hindi-letter" key={ch}>{ch}</span>
+          ))}
         </div>
 
-        {/* Decorative ring */}
-        <div className="hero-ring" aria-hidden="true" />
+        {/* Ink dust particles */}
+        <div className="hero-ink-particles" aria-hidden="true">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <div className="ink-particle" key={i} />
+          ))}
+        </div>
 
-        {/* Main Content */}
-        <div className="hero-content" style={{ transform: `translateY(${heroOffset * 0.04}px)` }}>
+        {/* Paper fragments */}
+        <div className="hero-paper-fragments" aria-hidden="true">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div className="paper-fragment" key={i} />
+          ))}
+        </div>
 
+        {/* Ink blot rings */}
+        <div className="ink-blot ink-blot-1" aria-hidden="true" />
+        <div className="ink-blot ink-blot-2" aria-hidden="true" />
+        <div className="ink-blot ink-blot-3" aria-hidden="true" />
+
+        {/* Calligraphy SVG */}
+        <svg className="hero-calligraphy" viewBox="0 0 260 120" aria-hidden="true">
+          <path d="M10,60 Q40,20 80,55 T150,50 T220,42 T255,60" />
+          <path d="M10,80 Q50,50 100,75 T190,68 T250,80" />
+          <path d="M20,95 Q70,70 120,90 T210,85 T250,95" />
+        </svg>
+
+        {/* Main content */}
+        <div className="hero-content" style={{ transform: `translateY(${heroOffset * 0.05}px)` }}>
           <div className="hero-left">
+
             <p className="hero-eyebrow">Hindi Literature Club · Since 2017</p>
 
-            <div className="hero-title">
-              <span className="hero-title-main">साहित्य सभा</span>
-              <span className="hero-title-sub">Sahitya Sabha</span>
+            <div className="hero-heading">
+              <span className="hero-heading-word word-1">साहित्य सभा</span>
+              <span className="hero-heading-word word-2">Sahitya Sabha</span>
             </div>
 
-            <div className="hero-quote-wrapper">
-              <blockquote className={`hero-quote${quoteFading ? ' fading' : ''}`}>
-                {quotes[quoteIndex]}
+            <div className="hero-quote-area">
+              <blockquote className={`hero-quote-text${quoteFading ? ' fading' : ''}`}>
+                <span style={{ display: 'block' }}>{quotes[quoteIndex]}</span>
               </blockquote>
             </div>
 
@@ -112,10 +132,10 @@ function HomePage() {
               जहाँ शब्द, संवेदना और संस्कृति का अद्भुत संगम होता है।
             </p>
 
-            <div className="hero-actions">
-              <a className="btn btn-primary" href="/members">सदस्य बनें</a>
+            <div className="hero-cta">
+              <a className="btn btn-primary"   href="/members">सदस्य बनें</a>
               <a className="btn btn-secondary" href="/forum">चर्चाएं खोजें</a>
-              <a className="btn btn-ghost" href="/events">आयोजन</a>
+              <a className="btn btn-ghost"     href="/events">आयोजन</a>
             </div>
           </div>
 
@@ -132,7 +152,7 @@ function HomePage() {
           </div>
         </div>
 
-        {/* Hero Bottom Bar */}
+        {/* Bottom bar */}
         <div className="hero-bottom">
           <div className="hero-stats">
             <div className="hero-stat">
@@ -148,13 +168,12 @@ function HomePage() {
               <span>आयोजन</span>
             </div>
           </div>
-
           <button className="scroll-indicator" onClick={scrollDown} aria-label="Scroll down">
             <span>नीचे देखें</span>
             <div className="scroll-arrow">↓</div>
           </button>
         </div>
-      </section>
+        </section>
 
       {/* ══════════════════════════════════════
           Featured Authors
