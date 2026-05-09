@@ -96,6 +96,7 @@ function App() {
   const [countdown, setCountdown] = useState({ d: '00', h: '00', m: '00', s: '00' })
   const [counts, setCounts] = useState({ members: 0, poems: 0, events: 0, forum: 0 })
   const [parallax, setParallax] = useState({ x: 0, y: 0 })
+  const [heroOffset, setHeroOffset] = useState(0)
 
   const events = useMemo(() => [
     { title: 'काव्य संध्या', date: '2026-06-18T18:00:00', display: '18 जून 2026 • शाम 6:00 बजे', tag: 'Open Mic', description: 'रचना पाठ, सजीव संगीत और curated poetic storytelling.' },
@@ -207,6 +208,14 @@ function App() {
     return () => window.removeEventListener('mousemove', onMove)
   }, [])
 
+  useEffect(() => {
+    const onScroll = () => {
+      setHeroOffset(Math.min(window.scrollY, 240))
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <div className="page">
       <div className="cursor-orb" style={{ transform: `translate(${cursor.x}px, ${cursor.y}px)` }} />
@@ -246,24 +255,35 @@ function App() {
           <span />
           <span />
         </div>
-        <div className="hero-content reveal">
-          <p className="eyebrow">A Modern Cultural Platform</p>
+        <div className="literary-float" aria-hidden="true">
+          <span className="float-book">पुस्तक</span>
+          <span className="float-ink">स्याही</span>
+          <span className="float-paper">पांडुलिपि</span>
+        </div>
+        <div className="hero-content reveal" style={{ transform: `translateY(${heroOffset * 0.08}px)` }}>
+          <p className="eyebrow">हिंदी साहित्य का प्रीमियम सांस्कृतिक मंच</p>
           <h1>साहित्य सभा</h1>
           <p className="type-line">{typingText}</p>
-          <p className="lead">परंपरा की गहराई और futuristic web experience का संगम। Hindi literature को immersive storytelling में जीने का नया मंच।</p>
+          <p className="lead">
+            एक calm editorial अनुभव जहां कविता, कहानी और विचार आधुनिक डिजिटल शिल्प में
+            जीवंत होते हैं।
+          </p>
           <div className="hero-actions">
-            <a className="btn btn-primary" href="#contact">Join the Club</a>
-            <a className="btn btn-secondary" href="#timeline">Explore Literature</a>
-            <a className="btn btn-secondary" href="#events">Upcoming Events</a>
+            <a className="btn btn-primary" href="#contact">क्लब से जुड़ें</a>
+            <a className="btn btn-secondary" href="#timeline">साहित्य देखें</a>
+            <a className="btn btn-secondary" href="#events">आगामी कार्यक्रम</a>
           </div>
         </div>
         <div className="hero-panel reveal delay-1">
-          <div className="glass-card" style={{ transform: `translate(${parallax.x}px, ${parallax.y}px)` }}>
-            <h2>Cinematic Launch</h2>
-            <blockquote>“भाव, भाषा और भविष्य का संगम।”</blockquote>
-            <p>Live readings • Interactive discussions • Curated archives</p>
+          <div
+            className="glass-card"
+            style={{ transform: `translate(${parallax.x * 0.85}px, ${parallax.y * 0.85}px)` }}
+          >
+            <h2>आज का साहित्यिक फ्रेम</h2>
+            <blockquote>“शब्दों की ऊष्मा से ही संस्कृति का भविष्य उजाला पाता है।”</blockquote>
+            <p>पाठ • संवाद • अभिलेख • अनुभव</p>
           </div>
-          <a className="scroll-indicator" href="#timeline">Scroll to Discover</a>
+          <a className="scroll-indicator" href="#timeline">नीचे स्क्रोल करें</a>
         </div>
       </section>
 

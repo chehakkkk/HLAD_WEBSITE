@@ -1,18 +1,18 @@
 :root {
-  --text: #4e4644;
-  --text-h: #241b1a;
-  --bg: #f8f2e8;
-  --card-bg: #fffbf4;
-  --panel-bg: #f2e5d2;
-  --glass-bg: rgba(255, 252, 245, 0.7);
+  --text: #52463d;
+  --text-h: #2f241d;
+  --bg: #f7f1e7;
+  --card-bg: #fefaf3;
+  --panel-bg: #f3e8d6;
+  --glass-bg: rgba(255, 252, 245, 0.74);
   --input-bg: #fffaf2;
-  --border: #dcc8ad;
-  --accent: #7f1d1d;
-  --accent-dark: #5f1414;
-  --accent-soft: rgba(127, 29, 29, 0.12);
-  --accent-border: rgba(127, 29, 29, 0.4);
-  --saffron: #d97706;
-  --gold: #d4a72c;
+  --border: #d7c3a7;
+  --accent: #7a4f26;
+  --accent-dark: #5f3d1f;
+  --accent-soft: rgba(122, 79, 38, 0.12);
+  --accent-border: rgba(122, 79, 38, 0.35);
+  --saffron: #d18a33;
+  --gold: #be9a54;
   --shadow-soft:
     rgba(36, 27, 26, 0.18) 0 12px 26px -18px,
     rgba(36, 27, 26, 0.08) 0 8px 16px -12px;
@@ -91,8 +91,8 @@ body {
   margin: 0;
   scroll-behavior: smooth;
   background:
-    radial-gradient(circle at 15% 8%, rgba(212, 167, 44, 0.16), transparent 30%),
-    radial-gradient(circle at 80% 20%, rgba(127, 29, 29, 0.16), transparent 32%),
+    radial-gradient(circle at 15% 8%, rgba(190, 154, 84, 0.2), transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(122, 79, 38, 0.14), transparent 32%),
     var(--bg);
 }
 
