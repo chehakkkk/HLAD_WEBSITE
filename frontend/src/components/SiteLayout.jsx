@@ -10,15 +10,11 @@ const links = [
 ]
 
 function SiteLayout() {
-  const [isDark, setIsDark] = useState(document.body.dataset.theme === 'dark')
+  
   const [isOpen, setIsOpen] = useState(false)
   const { auth, logout } = useClub()
 
-  const toggleTheme = () => {
-    const nextValue = !isDark
-    setIsDark(nextValue)
-    document.body.dataset.theme = nextValue ? 'dark' : 'light'
-  }
+  
 
   return (
     <div className="app-shell">
@@ -57,9 +53,7 @@ function SiteLayout() {
               Admin Login
             </NavLink>
           )}
-          <button className="theme-toggle" type="button" onClick={toggleTheme}>
-            {isDark ? 'Light' : 'Dark'}
-          </button>
+          const
         </div>
       </header>
 
