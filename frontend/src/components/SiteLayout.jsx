@@ -3,28 +3,25 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { useClub } from '../context/useClub'
 
 const links = [
-  { to: '/', label: 'Home', end: true },
+  { to: '/',        label: 'Home',   end: true },
   { to: '/members', label: 'Members' },
-  { to: '/forum', label: 'Forum' },
-  { to: '/events', label: 'Events' },
+  { to: '/forum',   label: 'Forum' },
+  { to: '/events',  label: 'Events' },
 ]
 
 function SiteLayout() {
-  
   const [isOpen, setIsOpen] = useState(false)
   const { auth, logout } = useClub()
-
-  
 
   return (
     <div className="app-shell">
       <header className="top-nav">
-        <NavLink className="brand" to="/">
-          साहित्य सभा
-        </NavLink>
-        <button className="menu-toggle" type="button" onClick={() => setIsOpen((value) => !value)}>
+        <NavLink className="brand" to="/">साहित्य सभा</NavLink>
+
+        <button className="menu-toggle" type="button" onClick={() => setIsOpen((v) => !v)}>
           ☰
         </button>
+
         <nav className={isOpen ? 'open' : ''}>
           {links.map((link) => (
             <NavLink
@@ -38,22 +35,22 @@ function SiteLayout() {
             </NavLink>
           ))}
           {auth.role === 'admin' && (
-            <NavLink to="/admin" onClick={() => setIsOpen(false)} className={({ isActive }) => (isActive ? 'active' : '')}>
+            <NavLink
+              to="/admin"
+              onClick={() => setIsOpen(false)}
+              className={({ isActive }) => (isActive ? 'active' : '')}
+            >
               Admin
             </NavLink>
           )}
         </nav>
+
         <div className="nav-actions">
           {auth.role === 'admin' ? (
-            <button className="theme-toggle" type="button" onClick={logout}>
-              Logout
-            </button>
+            <button className="nav-btn" type="button" onClick={logout}>Logout</button>
           ) : (
-            <NavLink to="/admin/login" className="theme-toggle">
-              Admin Login
-            </NavLink>
+            <NavLink to="/admin/login" className="nav-btn">Admin Login</NavLink>
           )}
-          const
         </div>
       </header>
 
