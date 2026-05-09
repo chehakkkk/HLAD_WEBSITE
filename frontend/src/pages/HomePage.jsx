@@ -1,25 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useClub } from '../context/useClub'
 
-const timeline = [
-  { era: 'आदिकाल',    year: '1000–1375', highlight: 'वीर रस और महाकाव्य परंपरा।' },
-  { era: 'भक्तिकाल',  year: '1375–1700', highlight: 'लोकभाषा और भक्ति काव्य का उत्कर्ष।' },
-  { era: 'रीतिकाल',   year: '1700–1900', highlight: 'श्रृंगार, अलंकार और काव्यशिल्प।' },
-  { era: 'आधुनिक काल', year: '1900–1950', highlight: 'यथार्थवाद और सामाजिक चेतना।' },
-  { era: 'समकालीन',   year: '1950–वर्तमान', highlight: 'प्रयोग और नए विमर्श।' },
-]
 
-const testimonials = [
-  { text: '"यह मंच हिंदी साहित्य को नए रूप में देखने का अवसर देता है।"', author: 'प्रिया शर्मा, सदस्य' },
-  { text: '"साहित्य सभा की community warm, welcoming और inspiring है।"',   author: 'अर्जुन मेहता, लेखक' },
-  { text: '"यहां हर सत्र विचार और संवेदना से भरपूर होता है।"',             author: 'नेहा सिंह, पाठक' },
-]
 
-const authors = [
-  { name: 'महादेवी वर्मा', quote: 'मैं नीर भरी दुख की बदली।',       period: 'आधुनिक काल' },
-  { name: 'दिनकर',         quote: 'सीधे-सादे शब्दों में ज्वाला।',    period: 'आधुनिक काल' },
-  { name: 'प्रेमचंद',      quote: 'साहित्य समाज का दर्पण है।',        period: 'आधुनिक काल' },
-]
+
 
 const quotes = [
   '"शब्द संस्कृति की सबसे सुंदर विरासत हैं।"',
@@ -51,7 +35,6 @@ function HomePage() {
   const { state } = useClub()
   const [quoteIndex, setQuoteIndex]         = useState(0)
   const [quoteFading, setQuoteFading]       = useState(false)
-  const [testimonialIndex, setTestimonialIndex] = useState(0)
   const [heroOffset, setHeroOffset]         = useState(0)
   const heroRef = useRef(null)
 
@@ -68,14 +51,7 @@ function HomePage() {
     }, 3500)
     return () => clearInterval(interval)
   }, [])
-
-  // Testimonial rotation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTestimonialIndex((v) => (v + 1) % testimonials.length)
-    }, 4000)
-    return () => clearInterval(interval)
-  }, [])
+  
 
   // Parallax
   useEffect(() => {
@@ -183,42 +159,12 @@ function HomePage() {
       {/* ══════════════════════════════════════
           Featured Authors
       ══════════════════════════════════════ */}
-      <section className="surface reveal">
-        <div className="section-head">
-          <span className="section-eyebrow">प्रमुख रचनाकार</span>
-          <h2>Featured Authors</h2>
-        </div>
-        <div className="card-grid">
-          {authors.map((author, i) => (
-            <article key={author.name} className={`info-card reveal reveal-delay-${i + 1}`}>
-              <span className="chip">{author.period}</span>
-              <h3>{author.name}</h3>
-              <p style={{ fontFamily: 'var(--heading)', fontStyle: 'italic', marginTop: '0.5rem' }}>
-                {author.quote}
-              </p>
-            </article>
-          ))}
-        </div>
-      </section>
+      
 
       {/* ══════════════════════════════════════
           Literature Timeline
       ══════════════════════════════════════ */}
-      <section className="surface reveal">
-        <div className="section-head">
-          <span className="section-eyebrow">साहित्य का इतिहास</span>
-          <h2>Literature Timeline</h2>
-        </div>
-        <div className="card-grid">
-          {timeline.map((item, i) => (
-            <article key={item.era} className={`timeline-item reveal reveal-delay-${(i % 4) + 1}`}>
-              <h3>{item.era}</h3>
-              <strong style={{ color: 'var(--muted-gold)', fontSize: '0.82rem' }}>{item.year}</strong>
-              <p style={{ marginTop: '0.3rem', fontSize: '0.88rem' }}>{item.highlight}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      
 
       {/* ══════════════════════════════════════
           Upcoming Events
@@ -291,34 +237,7 @@ function HomePage() {
       {/* ══════════════════════════════════════
           Testimonials + Stats
       ══════════════════════════════════════ */}
-      <section className="surface split-grid reveal">
-        <article className="info-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <span className="section-eyebrow">प्रतिक्रियाएं</span>
-          <h2 style={{ fontSize: '1.25rem', marginBottom: '0.75rem' }}>Testimonials</h2>
-          <blockquote style={{
-            fontFamily: 'var(--heading)', fontStyle: 'italic',
-            fontSize: '1rem', lineHeight: '1.65',
-            borderLeft: '3px solid var(--muted-gold)', paddingLeft: '1rem',
-            color: 'var(--warm-brown)', transition: 'opacity 0.4s ease'
-          }}>
-            {testimonials[testimonialIndex].text}
-          </blockquote>
-          <p style={{ marginTop: '0.6rem', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-            — {testimonials[testimonialIndex].author}
-          </p>
-        </article>
-
-        <article className="info-card">
-          <span className="section-eyebrow">हमारी उपलब्धियाँ</span>
-          <h2 style={{ fontSize: '1.25rem', marginBottom: '0.5rem' }}>Statistics</h2>
-          <div className="count-grid">
-            <article><strong>{state.members.length}</strong><span>Members</span></article>
-            <article><strong>{state.posts.length}</strong><span>Discussions</span></article>
-            <article><strong>{state.events.length}</strong><span>Events</span></article>
-            <article><strong>{state.gallery.length}</strong><span>Gallery</span></article>
-          </div>
-        </article>
-      </section>
+      
 
       {/* ══════════════════════════════════════
           Gallery + About
