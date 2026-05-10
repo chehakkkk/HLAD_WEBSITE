@@ -7,7 +7,7 @@ import ForumPage from './pages/ForumPage'
 import EventsPage from './pages/EventsPage'
 import AdminLoginPage from './pages/AdminLoginPage'
 import AdminDashboardPage from './pages/AdminDashboardPage'
-import './App.css'
+
 
 function App() {
   return (
