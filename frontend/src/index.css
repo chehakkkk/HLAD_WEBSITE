@@ -13,15 +13,6 @@
 
   --font-heading: 'Noto Serif Devanagari', 'Nirmala UI', Georgia, serif;
   --font-sans:    'Noto Sans Devanagari', 'Segoe UI', Arial, sans-serif;
-  --color-accent:      #5c3d2e;
-  --color-accent-dark: #3a2518;
-  --color-text:        #4a3728;
-  --color-text-h:      #2c1a10;
-  --color-text-muted:  #7a6250;
-  --color-border:      #cfc0a8;
-  --color-border-light:#e5dace;
-  --color-panel-bg:    #ede5d5;
-  --color-input-bg:    #fff9f2;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
