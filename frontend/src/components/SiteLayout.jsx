@@ -1,64 +1,120 @@
 import { useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useClub } from '../context/useClub'
 
 const links = [
-  { to: '/',        label: 'Home',   end: true },
-  { to: '/members', label: 'Members' },
-  { to: '/forum',   label: 'Forum' },
-  { to: '/events',  label: 'Events' },
+  { to: '/',        en: 'Home',   hi: 'मुख्य',    end: true },
+  { to: '/members', en: 'Team',   hi: 'टीम' },
+  { to: '/forum',   en: 'Forum',  hi: 'चर्चा' },
+  { to: '/events',  en: 'Events', hi: 'कार्यक्रम' },
 ]
 
-function SiteLayout() {
-  const [isOpen, setIsOpen] = useState(false)
+export default function SiteLayout() {
+  const [menuOpen, setMenuOpen] = useState(false)
   const { auth, logout } = useClub()
+  const location = useLocation()
 
   return (
-    <div className="app-shell">
-      <header className="top-nav">
-        <NavLink className="brand" to="/">साहित्य सभा</NavLink>
+    <div className="min-h-screen" style={{ background: '#f5f0e8' }}>
 
-        <button className="menu-toggle" type="button" onClick={() => setIsOpen((v) => !v)}>
-          ☰
-        </button>
+      {/* ── Navbar ── */}
+      <header className="sticky top-3 z-50 mx-3 md:mx-6">
+        <div className="flex items-center justify-between px-4 py-3 rounded-2xl border border-[#d4c4a0]"
+          style={{
+            background: 'rgba(245,240,232,0.92)',
+            backdropFilter: 'blur(20px)',
+            boxShadow: '0 4px 24px rgba(61,43,31,0.10), 0 1px 0 rgba(255,255,255,0.7) inset'
+          }}>
 
-        <nav className={isOpen ? 'open' : ''}>
-          {links.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              end={link.end}
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) => (isActive ? 'active' : '')}
-            >
-              {link.label}
-            </NavLink>
-          ))}
-          {auth.role === 'admin' && (
-            <NavLink
-              to="/admin"
-              onClick={() => setIsOpen(false)}
-              className={({ isActive }) => (isActive ? 'active' : '')}
-            >
-              Admin
-            </NavLink>
-          )}
-        </nav>
+          {/* Logo */}
+          <NavLink to="/" className="flex items-center gap-2.5 no-underline group">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center text-white text-sm font-bold transition-transform group-hover:scale-105"
+              style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)' }}>
+              📖
+            </div>
+            <div className="leading-tight">
+              <div className="font-bold text-[#3d2b1f] text-sm" style={{ fontFamily: 'var(--font-heading)' }}>
+                HLAD
+              </div>
+              <div className="text-[10px] text-[#8B6914]" style={{ fontFamily: 'var(--font-heading)' }}>
+                हिंदी साहित्य
+              </div>
+            </div>
+          </NavLink>
 
-        <div className="nav-actions">
-          {auth.role === 'admin' ? (
-            <button className="nav-btn" type="button" onClick={logout}>Logout</button>
-          ) : (
-            <NavLink to="/admin/login" className="nav-btn">Admin Login</NavLink>
-          )}
+          {/* Desktop nav */}
+          <nav className="hidden md:flex items-center gap-1">
+            {links.map((link) => (
+              <NavLink key={link.to} to={link.to} end={link.end}
+                className={({ isActive }) =>
+                  `no-underline px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 text-center
+                   ${isActive
+                     ? 'bg-[#8B6914] text-white'
+                     : 'text-[#5c3d2e] hover:bg-[#8B6914]/10 hover:text-[#8B6914]'
+                   }`
+                }>
+                <span className="block">{link.en}</span>
+                <span className="block text-[9px] opacity-70" style={{ fontFamily: 'var(--font-heading)' }}>
+                  {link.hi}
+                </span>
+              </NavLink>
+            ))}
+            {auth.role === 'admin' && (
+              <NavLink to="/admin"
+                className={({ isActive }) =>
+                  `no-underline px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200
+                   ${isActive ? 'bg-[#8B6914] text-white' : 'text-[#5c3d2e] hover:bg-[#8B6914]/10'}`
+                }>
+                Admin
+              </NavLink>
+            )}
+          </nav>
+
+          {/* Right side */}
+          <div className="flex items-center gap-2">
+            {auth.role === 'admin' ? (
+              <button onClick={logout}
+                className="text-sm px-4 py-2 rounded-xl border border-[#d4c4a0] text-[#5c3d2e] hover:bg-[#8B6914] hover:text-white hover:border-[#8B6914] transition-all duration-200 cursor-pointer">
+                Logout
+              </button>
+            ) : (
+              <NavLink to="/admin/login"
+                className="no-underline text-sm px-4 py-2 rounded-xl text-white font-semibold relative overflow-hidden btn-shimmer transition-all duration-200 hover:-translate-y-0.5"
+                style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)', boxShadow: '0 3px 12px rgba(139,105,20,0.35)' }}>
+                Join Now
+              </NavLink>
+            )}
+            {/* Mobile toggle */}
+            <button className="md:hidden w-8 h-8 flex items-center justify-center rounded-lg text-[#5c3d2e] hover:bg-[#8B6914]/10 transition-colors cursor-pointer"
+              onClick={() => setMenuOpen(v => !v)}>
+              {menuOpen ? '✕' : '☰'}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div className="md:hidden mt-2 rounded-2xl border border-[#d4c4a0] overflow-hidden"
+            style={{ background: 'rgba(245,240,232,0.97)', backdropFilter: 'blur(20px)' }}>
+            {links.map((link) => (
+              <NavLink key={link.to} to={link.to} end={link.end}
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `no-underline flex items-center justify-between px-5 py-3.5 border-b border-[#d4c4a0]/50 text-sm font-medium transition-colors
+                   ${isActive ? 'bg-[#8B6914]/10 text-[#8B6914]' : 'text-[#5c3d2e]'}`
+                }>
+                <span>{link.en}</span>
+                <span className="text-xs text-[#8B6914]" style={{ fontFamily: 'var(--font-heading)' }}>{link.hi}</span>
+              </NavLink>
+            ))}
+          </div>
+        )}
       </header>
 
-      <main className="page-stack">
+      {/* ── Page content ── */}
+      <main className="animate-fade-in">
         <Outlet />
       </main>
     </div>
   )
 }
-
-export default SiteLayout
