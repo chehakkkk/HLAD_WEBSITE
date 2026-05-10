@@ -6,7 +6,7 @@ const quotes = [
   { hi: 'साहित्य समाज का दर्पण है।',                en: '"Literature is the mirror of society."',                       author: '— प्रेमचंद' },
   { hi: 'कविता मनुष्य की संवेदना का उजास है।',       en: '"Poetry is the light of human sensitivity."',                  author: '— निराला' },
 ]
-
+space
 const offerings = [
   { icon: '📖', title: 'Literary Workshops',  desc: 'Master the art of Hindi poetry and prose with expert guidance' },
   { icon: '👥', title: 'Community Events',    desc: 'Connect with fellow literature enthusiasts at our regular meetups' },
