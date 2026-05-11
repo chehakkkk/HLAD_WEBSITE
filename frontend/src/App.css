@@ -767,7 +767,6 @@
   font-family: var(--sans);
   font-size: 0.9rem;
   transition: border-color 180ms ease, box-shadow 180ms ease;
-  outline: none;
 }
 .search-input:focus,
 .admin-form input:focus,
@@ -777,6 +776,16 @@
 .forum-tools input:focus {
   border-color: var(--muted-gold);
   box-shadow: 0 0 0 3px rgba(184, 148, 63, 0.15);
+}
+
+.search-input:focus-visible,
+.admin-form input:focus-visible,
+.admin-form select:focus-visible,
+.forum-tools select:focus-visible,
+.inline-form input:focus-visible,
+.forum-tools input:focus-visible {
+  outline: 2px solid rgba(139, 105, 20, 0.8);
+  outline-offset: 2px;
 }
 
 .search-input { width: 100%; margin-top: 0.8rem; }

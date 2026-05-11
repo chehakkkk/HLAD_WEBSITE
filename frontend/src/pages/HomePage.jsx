@@ -6,7 +6,7 @@ const quotes = [
   { hi: 'साहित्य समाज का दर्पण है।',                en: '"Literature is the mirror of society."',                       author: '— प्रेमचंद' },
   { hi: 'कविता मनुष्य की संवेदना का उजास है।',       en: '"Poetry is the light of human sensitivity."',                  author: '— निराला' },
 ]
-space
+
 const offerings = [
   { icon: '📖', title: 'Literary Workshops',  desc: 'Master the art of Hindi poetry and prose with expert guidance' },
   { icon: '👥', title: 'Community Events',    desc: 'Connect with fellow literature enthusiasts at our regular meetups' },
@@ -28,27 +28,43 @@ function useReveal() {
   }, [])
 }
 
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia?.('(prefers-reduced-motion: reduce)')
+    if (!mq) return
+    const onChange = () => setReduced(!!mq.matches)
+    onChange()
+    mq.addEventListener?.('change', onChange)
+    return () => mq.removeEventListener?.('change', onChange)
+  }, [])
+  return reduced
+}
+
 export default function HomePage() {
   const { state } = useClub()
   const [quoteIdx, setQuoteIdx] = useState(0)
   const [fading, setFading] = useState(false)
   const [scrollY, setScrollY] = useState(0)
+  const reducedMotion = usePrefersReducedMotion()
 
   useReveal()
 
   useEffect(() => {
+    if (reducedMotion) return
     const id = setInterval(() => {
       setFading(true)
       setTimeout(() => { setQuoteIdx(v => (v + 1) % quotes.length); setFading(false) }, 400)
     }, 4000)
     return () => clearInterval(id)
-  }, [])
+  }, [reducedMotion])
 
   useEffect(() => {
+    if (reducedMotion) return
     const fn = () => setScrollY(Math.min(window.scrollY, 300))
     window.addEventListener('scroll', fn, { passive: true })
     return () => window.removeEventListener('scroll', fn)
-  }, [])
+  }, [reducedMotion])
 
   const q = quotes[quoteIdx]
 
@@ -64,11 +80,15 @@ export default function HomePage() {
 
         {/* Subtle grid texture */}
         <div className="absolute inset-0 cross-pattern opacity-40 pointer-events-none" />
+        {/* Grain + glyph texture overlays (very subtle) */}
+        <div className="absolute inset-0 hero-grain pointer-events-none opacity-70" />
+        <div className="absolute inset-0 hero-glyphs pointer-events-none opacity-60" />
+        <div className="absolute inset-0 hero-inkwash pointer-events-none opacity-70" />
 
         {/* Floating Hindi tags */}
         {floatingTags.map((tag, i) => (
           <span key={tag}
-            className="absolute text-xs font-medium px-3 py-1.5 rounded-full border animate-tag-float pointer-events-none select-none"
+            className="hidden sm:inline-flex absolute text-xs font-medium px-3 py-1.5 rounded-full border animate-tag-float pointer-events-none select-none"
             style={{
               fontFamily: 'var(--font-heading)',
               color: '#8B6914',
@@ -86,8 +106,8 @@ export default function HomePage() {
         ))}
 
         {/* Big decorative pen SVG */}
-        <div className="absolute right-0 top-0 w-[45%] h-full flex items-center justify-center pointer-events-none"
-          style={{ transform: `translateY(${scrollY * 0.05}px)` }}>
+        <div className="hidden md:flex absolute right-0 top-0 w-[45%] h-full items-center justify-center pointer-events-none"
+          style={{ transform: reducedMotion ? undefined : `translateY(${scrollY * 0.05}px)` }}>
           <svg viewBox="0 0 300 360" className="w-full max-w-xs opacity-90" fill="none">
             {/* Book behind */}
             <rect x="80" y="60" width="160" height="220" rx="8" stroke="rgba(139,105,20,0.2)" strokeWidth="1.5" fill="none" />
@@ -115,8 +135,8 @@ export default function HomePage() {
         </div>
 
         {/* Hero text content */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center px-8 md:px-14 pt-10 pb-6 max-w-[580px]"
-          style={{ transform: `translateY(${scrollY * 0.04}px)` }}>
+        <div className="relative z-10 flex-1 flex flex-col justify-center px-6 sm:px-8 md:px-14 pt-10 pb-6 max-w-[580px]"
+          style={{ transform: reducedMotion ? undefined : `translateY(${scrollY * 0.04}px)` }}>
 
           {/* Hindi headline */}
           <h1 className="animate-word-rise text-[clamp(3rem,8vw,5.5rem)] leading-[1.0] text-[#3d2b1f] mb-1"
@@ -134,6 +154,9 @@ export default function HomePage() {
           <p className="animate-word-rise delay-300 text-lg md:text-xl text-[#5c3d2e] mb-6 font-medium">
             Hindi Literature &amp; Arts Division
           </p>
+
+          {/* Ornamental divider */}
+          <div className="animate-word-rise delay-300 hero-divider mb-6" aria-hidden="true" />
 
           {/* Quote card */}
           <div className="animate-word-rise delay-400 rounded-2xl p-5 mb-7 border border-[#d4c4a0]"
@@ -153,12 +176,12 @@ export default function HomePage() {
           {/* CTAs */}
           <div className="animate-word-rise delay-500 flex gap-3 flex-wrap">
             <a href="/members"
-              className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold text-sm relative overflow-hidden btn-shimmer transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+              className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold text-sm relative overflow-hidden btn-shimmer transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B6914]"
               style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)', boxShadow: '0 4px 18px rgba(139,105,20,0.40)' }}>
               Join the Club <span>✉</span>
             </a>
             <a href="/events"
-              className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border-2 border-[#8B6914] text-[#8B6914] transition-all duration-200 hover:bg-[#8B6914] hover:text-white hover:-translate-y-0.5">
+              className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border-2 border-[#8B6914] text-[#8B6914] transition-all duration-200 hover:bg-[#8B6914] hover:text-white hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B6914]">
               Explore Events
             </a>
           </div>
@@ -179,7 +202,7 @@ export default function HomePage() {
             ))}
           </div>
           <button onClick={() => window.scrollBy({ top: window.innerHeight * 0.85, behavior: 'smooth' })}
-            className="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition-opacity cursor-pointer border-none bg-transparent">
+            className="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition-opacity cursor-pointer border-none bg-transparent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8B6914]">
             <span className="text-[9px] uppercase tracking-widest text-[#7a6250]">scroll</span>
             <div className="w-7 h-7 rounded-full border border-[#b8943f] flex items-center justify-center text-xs text-[#8B6914] animate-bounce-scroll">↓</div>
           </button>
