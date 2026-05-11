@@ -1,25 +1,24 @@
-import { useEffect, useState } from 'react'
-import Navbar from '../components/Navbar'
+import { useEffect } from 'react'
 import HeroSection from '../components/HeroSection'
 import AboutSection from '../components/AboutSection'
 import EventsSection from '../components/EventsSection'
 import TeamSection from '../components/TeamSection'
 import GallerySection from '../components/GallerySection'
 import TestimonialsSection from '../components/TestimonialsSection'
+import ForumTeaser from '../components/home/ForumTeaser'
 import FaqSection from '../components/FaqSection'
-import ForumSection from '../components/forum/ForumSection'
-import Footer from '../components/Footer'
+import { useNavigationSection } from '../context/NavigationContext'
 
-const SECTION_IDS = ['home', 'about', 'events', 'team', 'gallery', 'testimonials', 'forum', 'faq']
+const SECTION_IDS = ['home', 'about', 'events', 'team', 'gallery', 'testimonials', 'discussions', 'faq']
 
 export default function HomePage() {
-  const [activeId, setActiveId] = useState('home')
+  const { setActiveSectionId } = useNavigationSection()
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveId(entry.target.id)
+          if (entry.isIntersecting) setActiveSectionId(entry.target.id)
         })
       },
       { rootMargin: '-18% 0px -50% 0px', threshold: [0, 0.12, 0.25] },
@@ -31,22 +30,18 @@ export default function HomePage() {
     })
 
     return () => observer.disconnect()
-  }, [])
+  }, [setActiveSectionId])
 
   return (
-    <>
-      <Navbar activeId={activeId} />
-      <main>
-        <HeroSection />
-        <AboutSection />
-        <EventsSection />
-        <TeamSection />
-        <GallerySection />
-        <TestimonialsSection />
-        <ForumSection />
-        <FaqSection />
-      </main>
-      <Footer />
-    </>
+    <main>
+      <HeroSection />
+      <AboutSection />
+      <EventsSection />
+      <TeamSection />
+      <GallerySection />
+      <TestimonialsSection />
+      <ForumTeaser />
+      <FaqSection />
+    </main>
   )
 }

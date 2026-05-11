@@ -1,4 +1,5 @@
 import { useCallback, useId, useMemo, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, useSpring, useTransform } from 'framer-motion'
 import MagneticButton from './MagneticButton'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
@@ -396,12 +397,14 @@ export default function HeroSection() {
               Join the Club
               <span aria-hidden>✒</span>
             </MagneticButton>
-            <MagneticButton
-              href="#forum"
-              className="font-body inline-flex items-center gap-2 rounded-xl border-2 border-charcoal/85 bg-white/80 px-7 py-3.5 text-sm font-semibold text-charcoal shadow-sm backdrop-blur-sm transition-colors hover:border-saffron hover:text-saffron"
-            >
-              Open forum
-            </MagneticButton>
+            <motion.div whileHover={reduced ? undefined : { y: -1 }} whileTap={reduced ? undefined : { scale: 0.99 }}>
+              <Link
+                to="/forum"
+                className="font-body inline-flex items-center gap-2 rounded-xl border-2 border-charcoal/85 bg-white/80 px-7 py-3.5 text-sm font-semibold text-charcoal shadow-sm backdrop-blur-sm transition-colors hover:border-saffron hover:text-saffron"
+              >
+                Open forum
+              </Link>
+            </motion.div>
           </motion.div>
         </motion.div>
 
