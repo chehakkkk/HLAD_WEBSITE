@@ -20,7 +20,7 @@ function loadJson(key, fallback) {
   }
 }
 
-const defaultAdminPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'hlad-literature-admin'
+const defaultAdminPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123'
 
 const ForumContext = createContext(null)
 
