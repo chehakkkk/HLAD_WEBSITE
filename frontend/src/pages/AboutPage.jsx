@@ -7,24 +7,26 @@ const milestones = [
 
 function AboutPage() {
   return (
-    <section className="surface">
-      <div className="section-head">
-        <h2>About Sahitya Sabha</h2>
-        <p>Tradition, craft, and modern cultural storytelling.</p>
-      </div>
-      <p className="lead">
-        साहित्य सभा हिंदी भाषा और साहित्य की सृजनात्मक ऊर्जा को contemporary design
-        अनुभव के साथ प्रस्तुत करने वाला समुदाय है।
-      </p>
-      <div className="timeline-list">
-        {milestones.map((item) => (
-          <article key={item.year} className="timeline-item">
-            <strong>{item.year}</strong>
-            <p>{item.text}</p>
-          </article>
-        ))}
-      </div>
-    </section>
+    <div className="px-3 md:px-6 py-4">
+      <section className="surface ui-prose">
+        <div className="section-head">
+          <h2>About Sahitya Sabha</h2>
+          <p className="muted">Tradition, craft, and modern cultural storytelling.</p>
+        </div>
+        <p className="lead">
+          साहित्य सभा हिंदी भाषा और साहित्य की सृजनात्मक ऊर्जा को contemporary design
+          अनुभव के साथ प्रस्तुत करने वाला समुदाय है।
+        </p>
+        <div className="timeline-list">
+          {milestones.map((item) => (
+            <article key={item.year} className="timeline-item">
+              <strong>{item.year}</strong>
+              <p>{item.text}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
   )
 }
 

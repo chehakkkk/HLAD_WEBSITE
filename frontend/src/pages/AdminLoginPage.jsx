@@ -30,13 +30,12 @@ export default function AdminLoginPage() {
         </div>
         <form onSubmit={onSubmit} className="space-y-4">
           <input value={username} onChange={e => setUsername(e.target.value)} placeholder="Username"
-            className="w-full px-4 py-3 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/80" />
+            className="ui-input" />
           <input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Password"
-            className="w-full px-4 py-3 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/80" />
+            className="ui-input" />
           {error && <p className="text-red-500 text-xs">{error}</p>}
           <button type="submit"
-            className="w-full py-3 rounded-xl text-white font-semibold text-sm cursor-pointer border-none transition-all hover:-translate-y-0.5"
-            style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)', boxShadow: '0 4px 18px rgba(139,105,20,0.35)' }}>
+            className="ui-btn ui-btn--primary w-full">
             Login
           </button>
         </form>

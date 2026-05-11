@@ -30,9 +30,9 @@ export default function ForumPage() {
         <div className="flex gap-3 flex-wrap">
           <input type="search" placeholder="Search discussions..." value={query}
             onChange={e => setQuery(e.target.value)}
-            className="flex-1 min-w-48 px-4 py-2.5 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/70" />
+            className="ui-input flex-1 min-w-48" />
           <select value={selectedCat} onChange={e => setSelectedCat(e.target.value)}
-            className="px-4 py-2.5 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/70">
+            className="ui-input w-auto min-w-48">
             <option value="">All categories</option>
             {state.categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
@@ -48,18 +48,17 @@ export default function ForumPage() {
           className="grid sm:grid-cols-3 gap-3">
           <input placeholder="Post title" value={postForm.title}
             onChange={e => setPostForm(p => ({...p,title:e.target.value}))}
-            className="px-4 py-2.5 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/70" />
+            className="ui-input" />
           <select value={postForm.categoryId} onChange={e => setPostForm(p => ({...p,categoryId:e.target.value}))}
-            className="px-4 py-2.5 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/70">
+            className="ui-input">
             <option value="">Choose category</option>
             {state.categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
           </select>
           <input placeholder="Post content" value={postForm.body}
             onChange={e => setPostForm(p => ({...p,body:e.target.value}))}
-            className="px-4 py-2.5 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/70" />
+            className="ui-input" />
           <button type="submit"
-            className="sm:col-span-3 py-2.5 rounded-xl text-white font-semibold text-sm cursor-pointer border-none"
-            style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)' }}>
+            className="ui-btn ui-btn--primary sm:col-span-3">
             Publish
           </button>
         </form>
@@ -105,12 +104,11 @@ export default function ForumPage() {
                   <div className="flex gap-2 mt-2">
                     <input placeholder="Reply..." value={replyText[cm.id]||''}
                       onChange={e => setReplyText(p => ({...p,[cm.id]:e.target.value}))}
-                      className="flex-1 px-3 py-1.5 rounded-lg border border-[#d4c4a0] text-xs bg-white/70 text-[#3d2b1f]" />
+                      className="ui-input flex-1 !py-2 !text-xs" />
                     <button onClick={() => { if (!replyText[cm.id]) return; addReply(post.id,cm.id,'Member',replyText[cm.id]); setReplyText(p => ({...p,[cm.id]:''})) }}
-                      className="px-3 py-1.5 rounded-lg text-xs text-white cursor-pointer border-none"
-                      style={{ background: '#8B6914' }}>Reply</button>
+                      className="ui-btn ui-btn--primary !px-3 !py-2 !text-xs">Reply</button>
                     {auth.role === 'admin' && (
-                      <button onClick={() => deleteComment(post.id,cm.id)} className="px-2 py-1.5 rounded-lg text-xs text-red-400 border border-red-200 cursor-pointer bg-transparent">✕</button>
+                      <button onClick={() => deleteComment(post.id,cm.id)} className="ui-btn ui-btn--danger !px-2.5 !py-2 !text-xs">✕</button>
                     )}
                   </div>
                 </div>
@@ -118,10 +116,9 @@ export default function ForumPage() {
               <div className="flex gap-2 mt-2">
                 <input placeholder="Write a comment..." value={commentText[post.id]||''}
                   onChange={e => setCommentText(p => ({...p,[post.id]:e.target.value}))}
-                  className="flex-1 px-3 py-2 rounded-xl border border-[#d4c4a0] text-xs bg-white/70 text-[#3d2b1f]" />
+                  className="ui-input flex-1 !text-xs" />
                 <button onClick={() => { if (!commentText[post.id]) return; addComment(post.id,'Member',commentText[post.id]); setCommentText(p => ({...p,[post.id]:''})) }}
-                  className="px-4 py-2 rounded-xl text-xs text-white cursor-pointer border-none"
-                  style={{ background: '#8B6914' }}>Comment</button>
+                  className="ui-btn ui-btn--primary !px-4 !py-2.5 !text-xs">Comment</button>
               </div>
             </div>
           </article>

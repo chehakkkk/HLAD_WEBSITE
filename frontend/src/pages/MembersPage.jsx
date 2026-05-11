@@ -32,8 +32,7 @@ export default function MembersPage() {
         <div className="max-w-sm mx-auto">
           <input type="search" placeholder="Search members..." value={query}
             onChange={e => setQuery(e.target.value)}
-            className="w-full px-5 py-3 rounded-2xl border border-[#d4c4a0] text-sm text-[#3d2b1f]"
-            style={{ background: 'rgba(255,252,245,0.9)' }} />
+            className="ui-input" />
         </div>
       </section>
 
@@ -55,9 +54,9 @@ export default function MembersPage() {
             {auth.role === 'admin' && (
               <div className="flex gap-2 mt-2">
                 <button onClick={() => { setEditingId(m.id); setForm({name:m.name,role:m.role,badge:m.badge,bio:m.bio}) }}
-                  className="text-xs px-2 py-1 rounded-lg border border-[#d4c4a0] text-[#5c3d2e] hover:bg-[#8B6914]/10 cursor-pointer transition-colors">Edit</button>
+                  className="ui-btn ui-btn--secondary !px-3 !py-2 !text-xs">Edit</button>
                 <button onClick={() => deleteMember(m.id)}
-                  className="text-xs px-2 py-1 rounded-lg border border-red-200 text-red-500 hover:bg-red-50 cursor-pointer transition-colors">Del</button>
+                  className="ui-btn ui-btn--danger !px-3 !py-2 !text-xs">Del</button>
               </div>
             )}
           </div>
@@ -74,17 +73,16 @@ export default function MembersPage() {
             {[['name','Name'],['role','Role'],['badge','Badge'],['bio','Bio']].map(([k,ph]) => (
               <input key={k} placeholder={ph} value={form[k]}
                 onChange={e => setForm(p => ({...p,[k]:e.target.value}))}
-                className="px-4 py-2.5 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/70" />
+                className="ui-input" />
             ))}
             <div className="sm:col-span-2 flex gap-3">
               <button type="submit"
-                className="flex-1 py-2.5 rounded-xl text-white font-semibold text-sm cursor-pointer border-none"
-                style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)' }}>
+                className="ui-btn ui-btn--primary flex-1">
                 {editingId ? 'Update' : 'Add Member'}
               </button>
               {editingId && (
                 <button type="button" onClick={() => { setEditingId(''); setForm({name:'',role:'',badge:'',bio:''}) }}
-                  className="px-6 py-2.5 rounded-xl text-sm border border-[#d4c4a0] text-[#5c3d2e] cursor-pointer hover:bg-[#8B6914]/10 transition-colors">
+                  className="ui-btn ui-btn--secondary">
                   Cancel
                 </button>
               )}

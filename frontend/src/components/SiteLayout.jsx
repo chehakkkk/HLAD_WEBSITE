@@ -74,13 +74,13 @@ export default function SiteLayout() {
           <div className="flex items-center gap-2">
             {auth.role === 'admin' ? (
               <button onClick={logout}
-                className="text-sm px-4 py-2 rounded-xl border border-[#d4c4a0] text-[#5c3d2e] hover:bg-[#8B6914] hover:text-white hover:border-[#8B6914] transition-all duration-200 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B6914]">
+                className="ui-btn ui-btn--secondary !px-4 !py-2 !text-sm">
                 Logout
               </button>
             ) : (
               <NavLink to="/admin/login"
-                className="no-underline text-sm px-4 py-2 rounded-xl text-white font-semibold relative overflow-hidden btn-shimmer transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B6914]"
-                style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)', boxShadow: '0 3px 12px rgba(139,105,20,0.35)' }}>
+                className="ui-btn ui-btn--primary btn-shimmer relative overflow-hidden !px-4 !py-2 !text-sm"
+                style={{ boxShadow: '0 3px 12px rgba(139,105,20,0.35)' }}>
                 Join Now
               </NavLink>
             )}

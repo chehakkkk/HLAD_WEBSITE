@@ -176,12 +176,11 @@ export default function HomePage() {
           {/* CTAs */}
           <div className="animate-word-rise delay-500 flex gap-3 flex-wrap">
             <a href="/members"
-              className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold text-sm relative overflow-hidden btn-shimmer transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B6914]"
-              style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)', boxShadow: '0 4px 18px rgba(139,105,20,0.40)' }}>
+              className="ui-btn ui-btn--primary btn-shimmer relative overflow-hidden">
               Join the Club <span>✉</span>
             </a>
             <a href="/events"
-              className="no-underline inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-sm border-2 border-[#8B6914] text-[#8B6914] transition-all duration-200 hover:bg-[#8B6914] hover:text-white hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B6914]">
+              className="ui-btn ui-btn--secondary">
               Explore Events
             </a>
           </div>
@@ -389,10 +388,10 @@ export default function HomePage() {
         <p className="text-[#d4aa5a] text-sm mb-7">नई कविताएं, कार्यक्रम और विशेष चर्चाएं सीधे inbox में पाएं।</p>
         <div className="flex gap-3 justify-center flex-wrap max-w-md mx-auto">
           <input type="email" placeholder="आपका ईमेल पता"
-            className="flex-1 min-w-48 px-4 py-3 rounded-xl text-sm text-[#3d2b1f] border-none"
+            className="ui-input flex-1 min-w-48 border-none"
             style={{ background: 'rgba(245,240,232,0.95)' }} />
-          <button className="px-6 py-3 rounded-xl text-sm font-semibold text-[#3d2b1f] cursor-pointer border-none relative overflow-hidden btn-shimmer transition-all hover:-translate-y-0.5"
-            style={{ background: 'linear-gradient(135deg, #d4aa5a, #b8943f)', boxShadow: '0 4px 14px rgba(184,148,63,0.45)' }}>
+          <button className="ui-btn ui-btn--secondary btn-shimmer relative overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, #d4aa5a, #b8943f)', color: '#3d2b1f', borderColor: 'rgba(212, 196, 160, 0.2)' }}>
             Subscribe
           </button>
         </div>

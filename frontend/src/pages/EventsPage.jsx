@@ -68,18 +68,17 @@ export default function EventsPage() {
               <p className="text-xs text-[#8B6914] font-medium mb-4">{new Date(ev.date).toLocaleString()}</p>
               <div className="flex gap-2 flex-wrap">
                 <button onClick={() => registerEvent(ev.id)}
-                  className="flex-1 py-2 rounded-xl text-sm font-semibold text-white cursor-pointer border-none transition-all hover:-translate-y-0.5"
-                  style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)' }}>
+                  className="ui-btn ui-btn--primary flex-1">
                   Register ({ev.registrations})
                 </button>
                 {auth.role === 'admin' && (
                   <>
                     <button onClick={() => { setEditingId(ev.id); setForm({title:ev.title,date:ev.date,detail:ev.detail}) }}
-                      className="px-3 py-2 rounded-xl text-xs border border-[#d4c4a0] text-[#5c3d2e] hover:bg-[#8B6914]/10 cursor-pointer transition-colors">
+                      className="ui-btn ui-btn--secondary !px-3 !py-2 !text-xs">
                       Edit
                     </button>
                     <button onClick={() => deleteEvent(ev.id)}
-                      className="px-3 py-2 rounded-xl text-xs border border-red-200 text-red-500 hover:bg-red-50 cursor-pointer transition-colors">
+                      className="ui-btn ui-btn--danger !px-3 !py-2 !text-xs">
                       Delete
                     </button>
                   </>
@@ -99,16 +98,15 @@ export default function EventsPage() {
           <form onSubmit={handleSubmit} className="grid sm:grid-cols-3 gap-3">
             <input placeholder="Event title" value={form.title}
               onChange={e => setForm(p => ({...p,title:e.target.value}))}
-              className="px-4 py-2.5 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/70" />
+              className="ui-input" />
             <input type="datetime-local" value={form.date}
               onChange={e => setForm(p => ({...p,date:e.target.value}))}
-              className="px-4 py-2.5 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/70" />
+              className="ui-input" />
             <input placeholder="Details" value={form.detail}
               onChange={e => setForm(p => ({...p,detail:e.target.value}))}
-              className="px-4 py-2.5 rounded-xl border border-[#d4c4a0] text-sm text-[#3d2b1f] bg-white/70" />
+              className="ui-input" />
             <button type="submit"
-              className="sm:col-span-3 py-2.5 rounded-xl text-white font-semibold text-sm cursor-pointer border-none transition-all hover:-translate-y-0.5"
-              style={{ background: 'linear-gradient(135deg, #8B6914, #5c3d2e)' }}>
+              className="ui-btn ui-btn--primary sm:col-span-3">
               {editingId ? 'Update Event' : 'Add Event'}
             </button>
           </form>
