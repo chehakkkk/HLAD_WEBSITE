@@ -1,1 +1,0 @@
-this folder will contain reusable components like header footer sidebar etc

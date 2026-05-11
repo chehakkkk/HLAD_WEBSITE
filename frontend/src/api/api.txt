@@ -1,1 +1,0 @@
-yha sari apis rhengi whihc we will call to send or retrieve data from backend
