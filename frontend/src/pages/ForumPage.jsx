@@ -43,8 +43,7 @@ export default function ForumPage() {
     displayName,
     setDisplayName,
     createPost,
-    updatePost,
-    deleteOwnPost,
+    adminUpdatePost,
     toggleLike,
     addComment,
     adminSession,
@@ -53,7 +52,6 @@ export default function ForumPage() {
     deletePost,
     deleteComment,
     togglePinPost,
-    reportPost,
   } = useForum()
 
   const [nameDraft, setNameDraft] = useState(displayName)
@@ -71,8 +69,6 @@ export default function ForumPage() {
   const [editBody, setEditBody] = useState('')
   const [editCategory, setEditCategory] = useState('साहित्य')
   const [editImage, setEditImage] = useState(null)
-  const [reportOpen, setReportOpen] = useState(null)
-  const [reportText, setReportText] = useState('')
 
   const visiblePosts = useMemo(() => {
     const list = adminSession ? posts : posts.filter((p) => !p.hidden)
@@ -135,7 +131,7 @@ export default function ForumPage() {
   const saveEdit = (e) => {
     e.preventDefault()
     if (!editingId) return
-    updatePost(editingId, { title: editTitle, body: editBody, category: editCategory, image: editImage })
+    adminUpdatePost(editingId, { title: editTitle, body: editBody, category: editCategory, image: editImage })
     setEditingId(null)
   }
 
@@ -144,13 +140,6 @@ export default function ForumPage() {
     if (!displayName.trim()) return
     addComment(postId, text)
     setCommentDrafts((d) => ({ ...d, [postId]: '' }))
-  }
-
-  const submitReport = (postId) => {
-    if (!reportText.trim()) return
-    reportPost(postId, reportText)
-    setReportOpen(null)
-    setReportText('')
   }
 
   return (
@@ -177,7 +166,7 @@ export default function ForumPage() {
               </span>
               <h1 className="font-hindi mt-4 text-4xl font-bold text-charcoal md:text-5xl">संवाद स्थल</h1>
               <p className="font-display mt-3 max-w-2xl text-lg text-charcoal-muted">
-                A modern space for Hindi literary dialogue — categories, imagery, and gentle motion in the HLAD voice.
+                Read, respond, and celebrate Hindi literature. New threads and edits are curated by HLAD administrators.
               </p>
             </div>
           </motion.div>
@@ -252,6 +241,19 @@ export default function ForumPage() {
             ))}
           </div>
 
+          {!adminSession && (
+            <motion.div
+              initial={reduced ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mb-8 rounded-2xl border border-saffron/20 bg-white/55 p-5 text-sm text-charcoal-muted shadow-md backdrop-blur-xl md:p-6"
+            >
+              <span className="font-hindi font-semibold text-saffron">सूचना ·</span>{' '}
+              Only HLAD admins can publish or edit posts. You can still like posts and join the conversation below after
+              setting your display name.
+            </motion.div>
+          )}
+
+          {adminSession && (
           <motion.form
             initial={reduced ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -259,7 +261,7 @@ export default function ForumPage() {
             onSubmit={submitPost}
             className="mb-12 rounded-2xl border border-saffron/25 bg-white/70 p-6 shadow-[0_20px_70px_rgba(224,120,44,0.14)] backdrop-blur-xl md:p-8"
           >
-            <h2 className="font-display text-xl font-bold text-charcoal">Compose</h2>
+            <h2 className="font-display text-xl font-bold text-charcoal">Compose (admin)</h2>
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <div>
                 <label className="text-xs font-semibold uppercase text-charcoal-muted">Category</label>
@@ -324,11 +326,11 @@ export default function ForumPage() {
               </motion.button>
             </div>
           </motion.form>
+          )}
 
           <div className="space-y-6">
             <AnimatePresence initial={false}>
               {sortedMain.map((post, index) => {
-                const isOwner = userId && post.authorId === userId
                 const liked = userId && post.likes.includes(userId)
                 const visibleComments = adminSession
                   ? post.comments
@@ -370,7 +372,7 @@ export default function ForumPage() {
                         )}
                       </div>
 
-                      {editingId === post.id ? (
+                      {adminSession && editingId === post.id ? (
                         <form onSubmit={saveEdit} className="mt-4 space-y-3">
                           <select
                             value={editCategory}
@@ -462,38 +464,6 @@ export default function ForumPage() {
                         >
                           {expandedId === post.id ? 'Hide thread' : 'Open thread'}
                         </motion.button>
-                        {isOwner && post.authorId !== 'system' && editingId !== post.id && (
-                          <>
-                            <button
-                              type="button"
-                              onClick={() => startEdit(post)}
-                              className="rounded-xl border border-charcoal/10 px-4 py-2 text-sm font-semibold"
-                            >
-                              Edit
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => {
-                                if (window.confirm('Delete your post permanently?')) deleteOwnPost(post.id)
-                              }}
-                              className="rounded-xl border border-red-200 bg-red-50 px-4 py-2 text-sm font-semibold text-red-700"
-                            >
-                              Delete
-                            </button>
-                          </>
-                        )}
-                        {!adminSession && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setReportOpen(post.id)
-                              setReportText('')
-                            }}
-                            className="rounded-xl border border-charcoal/10 px-4 py-2 text-sm font-semibold text-charcoal-muted hover:border-saffron/35"
-                          >
-                            Report
-                          </button>
-                        )}
                       </div>
 
                       {adminSession && (
@@ -501,6 +471,15 @@ export default function ForumPage() {
                           <span className="w-full text-[10px] font-bold uppercase tracking-wider text-charcoal-muted">
                             Admin
                           </span>
+                          {editingId !== post.id && (
+                            <button
+                              type="button"
+                              onClick={() => startEdit(post)}
+                              className="rounded-lg bg-white px-3 py-1.5 text-xs font-semibold shadow-sm ring-1 ring-charcoal/10"
+                            >
+                              Edit post
+                            </button>
+                          )}
                           <button
                             type="button"
                             onClick={() => togglePinPost(post.id)}
@@ -629,55 +608,6 @@ export default function ForumPage() {
         </aside>
       </div>
 
-      <AnimatePresence>
-        {reportOpen && (
-          <motion.div
-            className="fixed inset-0 z-[60] flex items-end justify-center bg-charcoal/40 p-4 backdrop-blur-sm sm:items-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setReportOpen(null)}
-          >
-            <motion.div
-              initial={reduced ? false : { y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={reduced ? undefined : { y: 16, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full max-w-md rounded-2xl border border-white/60 bg-white p-6 shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <h3 className="font-display text-lg font-bold text-charcoal">Report content</h3>
-              <p className="font-body mt-2 text-sm text-charcoal-muted">
-                Moderators review every report. Please describe what feels inappropriate.
-              </p>
-              <textarea
-                value={reportText}
-                onChange={(e) => setReportText(e.target.value)}
-                rows={4}
-                className="font-body mt-4 w-full rounded-xl border border-charcoal/12 px-3 py-2 text-sm outline-none ring-saffron/25 focus:ring-2"
-                placeholder="Reason…"
-              />
-              <div className="mt-4 flex justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setReportOpen(null)}
-                  className="rounded-lg border border-charcoal/15 px-4 py-2 text-sm font-semibold"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  onClick={() => submitReport(reportOpen)}
-                  className="rounded-lg bg-saffron px-4 py-2 text-sm font-semibold text-white disabled:opacity-40"
-                  disabled={!reportText.trim()}
-                >
-                  Submit
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </div>
   )
 }

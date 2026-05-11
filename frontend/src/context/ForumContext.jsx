@@ -116,6 +116,7 @@ export function ForumProvider({ children }) {
 
   const createPost = useCallback(
     (title, body, opts = {}) => {
+      if (!adminSession) return null
       const t = title.trim()
       const b = body.trim()
       if (!t || !b) return null
@@ -130,7 +131,7 @@ export function ForumProvider({ children }) {
         title: t,
         body: b,
         authorId: author,
-        authorName: displayName.trim() || 'अतिथि',
+        authorName: displayName.trim() || 'HLAD',
         createdAt: Date.now(),
         likes: [],
         pinned: false,
@@ -148,15 +149,15 @@ export function ForumProvider({ children }) {
       })
       return post.id
     },
-    [displayName, ensureUser],
+    [adminSession, displayName, ensureUser],
   )
 
-  const updatePost = useCallback(
+  const adminUpdatePost = useCallback(
     (postId, fields) => {
-      const uidLocal = userId || ensureUser()
+      if (!adminSession) return
       setPosts((prev) =>
         prev.map((p) => {
-          if (p.id !== postId || p.authorId !== uidLocal) return p
+          if (p.id !== postId) return p
           const next = { ...p, updatedAt: Date.now() }
           if (typeof fields.title === 'string') next.title = fields.title.trim()
           if (typeof fields.body === 'string') next.body = fields.body.trim()
@@ -168,46 +169,12 @@ export function ForumProvider({ children }) {
         }),
       )
       pushActivity(setActivityLog, {
-        type: 'post_edit',
-        message: 'Post updated',
-        meta: { postId, authorId: uidLocal },
-      })
-      return true
-    },
-    [ensureUser, userId],
-  )
-
-  const adminUpdatePost = useCallback((postId, fields) => {
-    setPosts((prev) =>
-      prev.map((p) => {
-        if (p.id !== postId) return p
-        const next = { ...p, updatedAt: Date.now() }
-        if (typeof fields.title === 'string') next.title = fields.title.trim()
-        if (typeof fields.body === 'string') next.body = fields.body.trim()
-        if (fields.category && FORUM_CATEGORIES.includes(fields.category)) next.category = fields.category
-        if (fields.image === null) next.image = null
-        else if (typeof fields.image === 'string' && fields.image.length < MAX_IMAGE_BYTES) next.image = fields.image
-        return migratePost(next)
-      }),
-    )
-    pushActivity(setActivityLog, {
-      type: 'admin_post_edit',
-      message: `Admin edited post ${postId}`,
-      meta: { postId },
-    })
-  }, [])
-
-  const deleteOwnPost = useCallback(
-    (postId) => {
-      const uidLocal = userId || ensureUser()
-      setPosts((prev) => prev.filter((p) => !(p.id === postId && p.authorId === uidLocal)))
-      pushActivity(setActivityLog, {
-        type: 'post_delete_self',
-        message: `Author removed their post`,
-        meta: { postId, authorId: uidLocal },
+        type: 'admin_post_edit',
+        message: `Admin edited post ${postId}`,
+        meta: { postId },
       })
     },
-    [ensureUser, userId],
+    [adminSession],
   )
 
   const toggleLike = useCallback(
@@ -268,82 +235,80 @@ export function ForumProvider({ children }) {
     pushActivity(setActivityLog, { type: 'admin_logout', message: 'Admin signed out', meta: {} })
   }, [])
 
-  const deletePost = useCallback((postId) => {
-    setPosts((prev) => prev.filter((p) => p.id !== postId))
-    pushActivity(setActivityLog, { type: 'admin_post_delete', message: `Deleted post ${postId}`, meta: { postId } })
-  }, [])
-
-  const deleteComment = useCallback((postId, commentId) => {
-    setPosts((prev) =>
-      prev.map((p) =>
-        p.id === postId ? { ...p, comments: p.comments.filter((c) => c.id !== commentId) } : p,
-      ),
-    )
-    pushActivity(setActivityLog, {
-      type: 'admin_comment_delete',
-      message: `Deleted comment`,
-      meta: { postId, commentId },
-    })
-  }, [])
-
-  const togglePinPost = useCallback((postId) => {
-    setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, pinned: !p.pinned } : p)))
-  }, [])
-
-  const setPostHidden = useCallback((postId, hidden) => {
-    setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, hidden } : p)))
-  }, [])
-
-  const setCommentHidden = useCallback((postId, commentId, hidden) => {
-    setPosts((prev) =>
-      prev.map((p) => {
-        if (p.id !== postId) return p
-        return {
-          ...p,
-          comments: p.comments.map((c) => (c.id === commentId ? { ...c, hidden } : c)),
-        }
-      }),
-    )
-  }, [])
-
-  const reportPost = useCallback(
-    (postId, reason) => {
-      const r = reason.trim()
-      if (!r) return false
-      const reporter = ensureUser()
-      const report = {
-        id: uid(),
-        reporterId: reporter,
-        reporterName: displayName.trim() || 'अतिथि',
-        reason: r,
-        createdAt: Date.now(),
-        dismissed: false,
-      }
-      setPosts((prev) =>
-        prev.map((p) => (p.id === postId ? { ...p, reports: [...p.reports, report] } : p)),
-      )
-      pushActivity(setActivityLog, {
-        type: 'report',
-        message: `Report filed for post ${postId}`,
-        meta: { postId, reportId: report.id },
-      })
-      return true
+  const deletePost = useCallback(
+    (postId) => {
+      if (!adminSession) return
+      setPosts((prev) => prev.filter((p) => p.id !== postId))
+      pushActivity(setActivityLog, { type: 'admin_post_delete', message: `Deleted post ${postId}`, meta: { postId } })
     },
-    [displayName, ensureUser],
+    [adminSession],
   )
 
-  const dismissReport = useCallback((postId, reportId) => {
-    setPosts((prev) =>
-      prev.map((p) =>
-        p.id === postId
-          ? {
-              ...p,
-              reports: p.reports.map((r) => (r.id === reportId ? { ...r, dismissed: true } : r)),
-            }
-          : p,
-      ),
-    )
-  }, [])
+  const deleteComment = useCallback(
+    (postId, commentId) => {
+      if (!adminSession) return
+      setPosts((prev) =>
+        prev.map((p) =>
+          p.id === postId ? { ...p, comments: p.comments.filter((c) => c.id !== commentId) } : p,
+        ),
+      )
+      pushActivity(setActivityLog, {
+        type: 'admin_comment_delete',
+        message: `Deleted comment`,
+        meta: { postId, commentId },
+      })
+    },
+    [adminSession],
+  )
+
+  const togglePinPost = useCallback(
+    (postId) => {
+      if (!adminSession) return
+      setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, pinned: !p.pinned } : p)))
+    },
+    [adminSession],
+  )
+
+  const setPostHidden = useCallback(
+    (postId, hidden) => {
+      if (!adminSession) return
+      setPosts((prev) => prev.map((p) => (p.id === postId ? { ...p, hidden } : p)))
+    },
+    [adminSession],
+  )
+
+  const setCommentHidden = useCallback(
+    (postId, commentId, hidden) => {
+      if (!adminSession) return
+      setPosts((prev) =>
+        prev.map((p) => {
+          if (p.id !== postId) return p
+          return {
+            ...p,
+            comments: p.comments.map((c) => (c.id === commentId ? { ...c, hidden } : c)),
+          }
+        }),
+      )
+    },
+    [adminSession],
+  )
+
+  const dismissReport = useCallback(
+    (postId, reportId) => {
+      if (!adminSession) return
+      setPosts((prev) =>
+        prev.map((p) =>
+          p.id === postId
+            ? {
+                ...p,
+                reports: p.reports.map((r) => (r.id === reportId ? { ...r, dismissed: true } : r)),
+              }
+            : p,
+        ),
+      )
+    },
+    [adminSession],
+  )
 
   const value = useMemo(
     () => ({
@@ -353,9 +318,7 @@ export function ForumProvider({ children }) {
       setDisplayName,
       ensureUser,
       createPost,
-      updatePost,
       adminUpdatePost,
-      deleteOwnPost,
       toggleLike,
       addComment,
       adminSession,
@@ -366,7 +329,6 @@ export function ForumProvider({ children }) {
       togglePinPost,
       setPostHidden,
       setCommentHidden,
-      reportPost,
       dismissReport,
       activityLog,
     }),
@@ -377,9 +339,7 @@ export function ForumProvider({ children }) {
       setDisplayName,
       ensureUser,
       createPost,
-      updatePost,
       adminUpdatePost,
-      deleteOwnPost,
       toggleLike,
       addComment,
       adminSession,
@@ -390,7 +350,6 @@ export function ForumProvider({ children }) {
       togglePinPost,
       setPostHidden,
       setCommentHidden,
-      reportPost,
       dismissReport,
       activityLog,
     ],

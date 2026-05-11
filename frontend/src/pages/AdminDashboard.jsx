@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FORUM_CATEGORIES } from '../constants/hlad'
@@ -24,6 +24,7 @@ const tabs = [
 
 export default function AdminDashboard() {
   const reduced = usePrefersReducedMotion()
+  const [deskReady, setDeskReady] = useState(false)
   const [tab, setTab] = useState('overview')
   const [editPost, setEditPost] = useState(null)
   const [editTitle, setEditTitle] = useState('')
@@ -45,6 +46,11 @@ export default function AdminDashboard() {
   } = useForum()
 
   const { members } = useMembers()
+
+  useEffect(() => {
+    const id = window.setTimeout(() => setDeskReady(true), 160)
+    return () => window.clearTimeout(id)
+  }, [])
 
   const stats = useMemo(() => {
     const comments = posts.reduce((n, p) => n + p.comments.length, 0)
@@ -90,8 +96,31 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-[100svh] bg-gradient-to-b from-parchment via-parchment to-parchment-dark pb-20 pt-8">
+      <AnimatePresence>
+        {!deskReady && (
+          <motion.div
+            key="desk-load"
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-4 bg-parchment/88 backdrop-blur-md"
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <motion.div
+              className="h-11 w-11 rounded-full border-2 border-saffron/25 border-t-saffron"
+              animate={reduced ? undefined : { rotate: 360 }}
+              transition={{ duration: 0.9, repeat: Infinity, ease: 'linear' }}
+            />
+            <p className="font-body text-sm font-medium tracking-wide text-charcoal-muted">Loading dashboard…</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="pointer-events-none fixed inset-0 cross-pattern opacity-25" />
-      <div className="relative z-10 mx-auto max-w-6xl px-4 md:px-6">
+      <motion.div
+        className="relative z-10 mx-auto max-w-6xl px-4 md:px-6"
+        animate={{ opacity: deskReady ? 1 : 0.55, y: deskReady ? 0 : 8 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+      >
         <div className="flex flex-col gap-4 border-b border-charcoal/10 pb-6 md:flex-row md:items-center md:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-saffron">Administration</p>
@@ -368,7 +397,7 @@ export default function AdminDashboard() {
             </ul>
           </div>
         )}
-      </div>
+      </motion.div>
 
       <AnimatePresence>
         {editPost && (
