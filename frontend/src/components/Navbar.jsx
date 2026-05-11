@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { AnimatePresence, motion, useScroll, useMotionValueEvent } from 'framer-motion'
 import MagneticButton from './MagneticButton'
 
@@ -7,21 +8,18 @@ const links = [
   { id: 'about', en: 'About', hi: 'परिचय' },
   { id: 'events', en: 'Events', hi: 'कार्यक्रम' },
   { id: 'team', en: 'Team', hi: 'टीम' },
+  { id: 'forum', en: 'Forum', hi: 'संवाद' },
   { id: 'faq', en: 'FAQ', hi: 'प्रश्न' },
 ]
 
 export default function Navbar({ activeId = 'home' }) {
-  const [scrolled, setScrolled] = useState(false)
+  const [scrolled, setScrolled] = useState(() => (typeof window !== 'undefined' ? window.scrollY > 48 : false))
   const [mobileOpen, setMobileOpen] = useState(false)
   const { scrollY } = useScroll()
 
   useMotionValueEvent(scrollY, 'change', (y) => {
     setScrolled(y > 48)
   })
-
-  useEffect(() => {
-    setScrolled(window.scrollY > 48)
-  }, [])
 
   useEffect(() => {
     if (mobileOpen) document.body.style.overflow = 'hidden'
@@ -81,12 +79,24 @@ export default function Navbar({ activeId = 'home' }) {
         </div>
 
         <div className="flex items-center gap-2">
+          <Link
+            to="/admin/login"
+            className="font-body hidden items-center justify-center rounded-xl border-2 border-charcoal/18 bg-white/75 px-4 py-2.5 text-sm font-semibold text-charcoal shadow-sm backdrop-blur-sm transition-colors hover:border-saffron hover:text-saffron lg:inline-flex"
+          >
+            Admin Login
+          </Link>
           <MagneticButton
             href="#events"
             className="font-body hidden rounded-xl bg-gradient-to-r from-saffron to-saffron-deep px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-saffron/30 transition-shadow hover:shadow-xl hover:shadow-saffron/40 lg:inline-flex"
           >
             Join Now
           </MagneticButton>
+          <Link
+            to="/admin/login"
+            className="font-body hidden items-center justify-center rounded-xl border border-charcoal/15 bg-white/80 px-3 py-2 text-[11px] font-semibold text-charcoal sm:inline-flex lg:hidden"
+          >
+            Admin
+          </Link>
           <MagneticButton
             href="#events"
             className="font-body inline-flex rounded-xl bg-gradient-to-r from-saffron to-saffron-deep px-4 py-2 text-xs font-semibold text-white shadow-md shadow-saffron/25 lg:hidden"
@@ -137,6 +147,13 @@ export default function Navbar({ activeId = 'home' }) {
                     </a>
                   )
                 })}
+                <Link
+                  to="/admin/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-xl border border-charcoal/10 px-4 py-3 font-body text-sm font-semibold text-charcoal hover:bg-beige/80"
+                >
+                  Admin Login
+                </Link>
               </div>
             </motion.div>
           </motion.div>
