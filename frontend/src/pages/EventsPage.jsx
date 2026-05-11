@@ -29,27 +29,34 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="px-3 md:px-6 py-4 space-y-5">
+    <div className="px-3 md:px-6 py-4 space-y-5 ui-page">
 
       {/* Header */}
-      <section className="rounded-3xl p-8 md:p-12 text-center cross-pattern"
-        style={{ background: 'linear-gradient(160deg, #f5f0e8 0%, #ede4cc 100%)', border: '1px solid rgba(212,196,160,0.5)' }}>
-        <h1 className="text-3xl md:text-5xl text-[#3d2b1f] mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
-          आगामी कार्यक्रम
-        </h1>
-        <p className="text-[#7a6250]">Upcoming Events &amp; Activities</p>
-
-        {/* Countdown */}
-        <div className="flex gap-4 justify-center mt-8 flex-wrap">
-          {[['d','Days'],['h','Hours'],['m','Min'],['s','Sec']].map(([k,l]) => (
-            <div key={k} className="rounded-2xl px-6 py-4 text-center border border-[#d4c4a0]"
-              style={{ background: 'rgba(255,252,245,0.8)', minWidth: '72px' }}>
-              <div className="text-3xl font-bold text-[#8B6914]" style={{ fontFamily: 'var(--font-heading)' }}>
-                {countdown[k]}
-              </div>
-              <div className="text-[10px] uppercase tracking-widest text-[#7a6250] mt-1">{l}</div>
+      <section className="ui-surface overflow-hidden">
+        <div className="ui-split">
+          <div className="ui-illustration cross-pattern flex items-end">
+            <div className="p-6">
+              <div className="ui-kicker mb-3">Events • कार्यक्रम</div>
+              <h1 className="ui-title text-3xl md:text-5xl mb-2">आगामी कार्यक्रम</h1>
+              <p className="ui-subtitle max-w-[54ch]">Upcoming Events &amp; Activities</p>
             </div>
-          ))}
+          </div>
+          <div className="ui-panel">
+            <h2 className="ui-title text-xl mb-4">Next event countdown</h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[['d','Days'],['h','Hours'],['m','Min'],['s','Sec']].map(([k,l]) => (
+                <div key={k} className="ui-surface px-4 py-4 text-center">
+                  <div className="text-3xl font-bold text-[#8B6914]" style={{ fontFamily: 'var(--font-heading)' }}>
+                    {countdown[k]}
+                  </div>
+                  <div className="text-[10px] uppercase tracking-widest text-[#7a6250] mt-1">{l}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 text-xs text-[#7a6250]">
+              Updates automatically every second.
+            </div>
+          </div>
         </div>
       </section>
 

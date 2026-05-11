@@ -20,22 +20,36 @@ export default function ForumPage() {
   , [state.posts, query, selectedCat])
 
   return (
-    <div className="px-3 md:px-6 py-4 space-y-5">
+    <div className="px-3 md:px-6 py-4 space-y-5 ui-page">
 
       {/* Header */}
-      <section className="rounded-3xl p-8 cross-pattern"
-        style={{ background: 'linear-gradient(160deg, #f5f0e8 0%, #ede4cc 100%)', border: '1px solid rgba(212,196,160,0.5)' }}>
-        <h1 className="text-3xl text-[#3d2b1f] mb-1" style={{ fontFamily: 'var(--font-heading)' }}>चर्चा मंच</h1>
-        <p className="text-[#7a6250] text-sm mb-5">Discussion Forum — create posts, comments and explore categories</p>
-        <div className="flex gap-3 flex-wrap">
-          <input type="search" placeholder="Search discussions..." value={query}
-            onChange={e => setQuery(e.target.value)}
-            className="ui-input flex-1 min-w-48" />
-          <select value={selectedCat} onChange={e => setSelectedCat(e.target.value)}
-            className="ui-input w-auto min-w-48">
-            <option value="">All categories</option>
-            {state.categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-          </select>
+      <section className="ui-surface overflow-hidden">
+        <div className="ui-split">
+          <div className="ui-illustration cross-pattern flex items-end">
+            <div className="p-6">
+              <div className="ui-kicker mb-3">चर्चा • Forum</div>
+              <h1 className="ui-title text-3xl md:text-4xl mb-2">चर्चा मंच</h1>
+              <p className="ui-subtitle max-w-[54ch]">
+                Discussion Forum — create posts, comments and explore categories.
+              </p>
+            </div>
+          </div>
+          <div className="ui-panel">
+            <h2 className="ui-title text-xl mb-4">Search & Filter</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
+              <input type="search" placeholder="Search discussions..." value={query}
+                onChange={e => setQuery(e.target.value)}
+                className="ui-input" />
+              <select value={selectedCat} onChange={e => setSelectedCat(e.target.value)}
+                className="ui-input">
+                <option value="">All categories</option>
+                {state.categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+            <div className="mt-4 text-xs text-[#7a6250]">
+              Tip: use keywords + category to find posts fast.
+            </div>
+          </div>
         </div>
       </section>
 

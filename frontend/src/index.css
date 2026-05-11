@@ -288,6 +288,101 @@ input:focus, select:focus, textarea:focus {
 
 /* ── Consistent buttons/inputs across pages ── */
 @layer components {
+  .ui-page {
+    @apply mx-auto w-full;
+    max-width: 1160px;
+  }
+
+  .ui-surface {
+    border: 1px solid var(--border-light);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(250, 246, 239, 0.46));
+    box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    border-radius: 1.5rem;
+  }
+
+  .ui-section-header {
+    @apply text-center;
+    padding: clamp(1.6rem, 3vw, 2.6rem);
+    border-bottom: 1px solid rgba(212,196,160,0.45);
+    background: rgba(237,228,213,0.32);
+  }
+
+  .ui-kicker {
+    @apply inline-flex items-center gap-2 font-semibold uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: var(--color-gold);
+  }
+
+  .ui-title {
+    font-family: var(--font-heading);
+    color: var(--color-brown);
+    letter-spacing: -0.02em;
+  }
+
+  .ui-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+    margin-top: 0.35rem;
+  }
+
+  .ui-split {
+    @apply grid;
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+
+  .ui-illustration {
+    @apply relative overflow-hidden;
+    min-height: 320px;
+    border-right: 1px solid rgba(212,196,160,0.45);
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(184,148,63,0.20) 0%, transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(92,61,46,0.10) 0%, transparent 55%),
+      linear-gradient(135deg, rgba(232,217,184,0.85) 0%, rgba(212,196,156,0.75) 50%, rgba(200,180,136,0.72) 100%);
+  }
+
+  .ui-illustration::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(61,43,31,0.018), rgba(61,43,31,0.018) 1px, transparent 1px, transparent 7px);
+    opacity: 0.9;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+  }
+
+  .ui-panel {
+    @apply bg-white/70;
+    padding: clamp(1.25rem, 2.6vw, 2rem);
+  }
+
+  .ui-feature-row {
+    @apply flex items-start gap-3;
+    padding: 0.85rem 0.9rem;
+    border-radius: 1rem;
+    transition: background-color var(--dur-ui) var(--ease-out), transform var(--dur-ui) var(--ease-out);
+  }
+  .ui-feature-row:hover {
+    background: rgba(139,105,20,0.06);
+    transform: translateY(-1px);
+  }
+  .ui-feature-icon {
+    @apply flex items-center justify-center shrink-0;
+    width: 40px;
+    height: 40px;
+    border-radius: 0.9rem;
+    border: 1px solid rgba(212,196,160,0.65);
+    background: rgba(139,105,20,0.07);
+    color: var(--color-gold);
+  }
+
+  @media (max-width: 860px) {
+    .ui-split { grid-template-columns: 1fr; }
+    .ui-illustration { border-right: none; border-bottom: 1px solid rgba(212,196,160,0.45); min-height: 220px; }
+  }
+
   .ui-btn {
     @apply inline-flex items-center justify-center gap-2 font-semibold select-none;
     padding: 0.72rem 1.1rem;

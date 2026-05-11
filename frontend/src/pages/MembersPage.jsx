@@ -20,19 +20,29 @@ export default function MembersPage() {
   }
 
   return (
-    <div className="px-3 md:px-6 py-4 space-y-5">
+    <div className="px-3 md:px-6 py-4 space-y-5 ui-page">
 
       {/* Header */}
-      <section className="rounded-3xl p-8 md:p-12 text-center cross-pattern"
-        style={{ background: 'linear-gradient(160deg, #f5f0e8 0%, #ede4cc 100%)', border: '1px solid rgba(212,196,160,0.5)' }}>
-        <h1 className="text-3xl md:text-5xl text-[#3d2b1f] mb-2" style={{ fontFamily: 'var(--font-heading)' }}>
-          Meet Our Team
-        </h1>
-        <p className="text-[#7a6250] mb-6">Dedicated individuals preserving and promoting Hindi literature</p>
-        <div className="max-w-sm mx-auto">
-          <input type="search" placeholder="Search members..." value={query}
-            onChange={e => setQuery(e.target.value)}
-            className="ui-input" />
+      <section className="ui-surface overflow-hidden">
+        <div className="ui-split">
+          <div className="ui-illustration cross-pattern flex items-end">
+            <div className="p-6">
+              <div className="ui-kicker mb-3">Team • सदस्य</div>
+              <h1 className="ui-title text-3xl md:text-5xl mb-2">Meet Our Team</h1>
+              <p className="ui-subtitle max-w-[54ch]">
+                Dedicated individuals preserving and promoting Hindi literature.
+              </p>
+            </div>
+          </div>
+          <div className="ui-panel">
+            <h2 className="ui-title text-xl mb-4">Find a member</h2>
+            <input type="search" placeholder="Search members..." value={query}
+              onChange={e => setQuery(e.target.value)}
+              className="ui-input" />
+            <div className="mt-4 text-xs text-[#7a6250]">
+              Search by name, role, or badge.
+            </div>
+          </div>
         </div>
       </section>
 
