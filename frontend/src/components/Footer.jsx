@@ -52,7 +52,7 @@ export default function Footer() {
         </div>
       </div>
       <div className="font-body mx-auto mt-12 max-w-6xl border-t border-white/10 px-4 pt-6 text-center text-xs text-white/45 md:px-6">
-        © {new Date().getFullYear()} HLAD — Hindi Literature &amp; Arts Division
+        © {new Date().getFullYear()} HLAD — Hindi Literature &amp; Debating Club
       </div>
     </footer>
   )

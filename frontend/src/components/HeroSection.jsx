@@ -367,7 +367,7 @@ export default function HeroSection() {
             }}
             className="font-display mt-4 max-w-md text-lg font-medium leading-snug text-charcoal md:text-xl"
           >
-            Hindi Literature &amp; Arts Division
+            Hindi Literature &amp; Debating Club
           </motion.p>
 
           <motion.div
