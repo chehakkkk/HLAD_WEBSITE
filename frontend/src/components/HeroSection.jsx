@@ -5,8 +5,13 @@ import HeroRotatingQuote from './HeroRotatingQuote'
 import MagneticButton from './MagneticButton'
 import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion'
 
-/** Quill / brush writing tip — viewBox 320×400 at ~(96, 372) */
-const FEATHER_TIP = { left: '31%', top: '93%' }
+/** Feather SVG viewBox — quill lowest vertex (88, 388) = sharp bottom writing tip */
+const FEATHER_VIEWBOX = { w: 320, h: 400 }
+const FEATHER_TIP_SVG = { x: 88, y: 388 }
+const FEATHER_TIP = {
+  left: `${(FEATHER_TIP_SVG.x / FEATHER_VIEWBOX.w) * 100}%`,
+  top: `${(FEATHER_TIP_SVG.y / FEATHER_VIEWBOX.h) * 100}%`,
+}
 
 const GENTLE_SWAY = {
   rotate: [0, 0.55, -0.48, 0.32, 0],
@@ -32,7 +37,7 @@ const literaryTags = [
   { label: 'संवाद', bottom: '18%', left: '12%', delay: 0.35, float: 5 },
 ]
 
-const HINDI_LETTER_POOL = ['क', 'व', 'स', 'त', 'अ', 'ह', 'शब्द']
+const HINDI_LETTER_POOL = ['क', 'व', 'स', 'त', 'अ', 'ह']
 
 /** Curved ink stream: lower quill tip → long arc right with gentle lift */
 function buildLetterBurst(seed) {
@@ -53,7 +58,7 @@ function buildLetterBurst(seed) {
       rotate: 0,
       delay: 0.25 + i * 0.22,
       duration: 3.6 + i * 0.1,
-      size: char.length > 1 ? 'text-xl md:text-2xl' : 'text-2xl md:text-3xl',
+      size: 'text-2xl md:text-3xl',
     }
   })
 }
@@ -129,8 +134,8 @@ function InkTrail({ burst, reduced }) {
 
   return (
     <motion.svg
-      className="pointer-events-none absolute left-0 top-0 z-[1] h-24 w-56 overflow-visible sm:w-64"
-      viewBox="0 0 240 80"
+      className="pointer-events-none absolute left-0 top-0 z-[1] h-28 w-60 overflow-visible sm:w-72"
+      viewBox="0 0 260 90"
       fill="none"
       aria-hidden
       initial={{ opacity: 0 }}
@@ -138,14 +143,14 @@ function InkTrail({ burst, reduced }) {
       transition={{ duration: 3.4, ease: [0.16, 1, 0.3, 1] }}
     >
       <defs>
-        <linearGradient id="ink-trail-grad" x1="0%" y1="60%" x2="100%" y2="20%">
-          <stop offset="0%" stopColor="rgba(224, 120, 44, 0.55)" />
+        <linearGradient id="ink-trail-grad" x1="0%" y1="80%" x2="100%" y2="10%">
+          <stop offset="0%" stopColor="rgba(224, 120, 44, 0.6)" />
           <stop offset="70%" stopColor="rgba(244, 168, 98, 0.25)" />
           <stop offset="100%" stopColor="rgba(244, 168, 98, 0)" />
         </linearGradient>
       </defs>
       <motion.path
-        d="M 2 62 Q 80 54 150 28 T 232 6"
+        d="M 0 4 Q 70 -4 140 -22 T 248 -52"
         stroke="url(#ink-trail-grad)"
         strokeWidth="2"
         strokeLinecap="round"
@@ -191,8 +196,11 @@ function FeatherSparkles({ burst, reduced }) {
   )
 }
 
-const FEATHER_SVG_CLASS =
-  'relative block w-[min(78vw,320px)] max-w-full sm:w-[min(85vw,380px)] md:w-[min(92vw,440px)]'
+/** Shared frame matching viewBox 320×400 so % tip coords align on all breakpoints */
+const FEATHER_FRAME_CLASS =
+  'relative block aspect-[320/400] w-[min(78vw,320px)] max-w-full sm:w-[min(85vw,380px)] md:w-[min(92vw,440px)]'
+
+const FEATHER_SVG_CLASS = `${FEATHER_FRAME_CLASS} h-auto`
 
 /** Dedicated layer: particles render above feather glows (isolated stacking) */
 function FeatherParticleLayer({ burst, reduced, interacting }) {
@@ -204,13 +212,17 @@ function FeatherParticleLayer({ burst, reduced, interacting }) {
       style={{ isolation: 'isolate' }}
       aria-hidden
     >
-      <div className={`relative ${FEATHER_SVG_CLASS}`}>
+      <div className={FEATHER_FRAME_CLASS}>
         <AnimatePresence>
           {interacting && (
             <motion.div
               key="feather-pulse"
-              className="absolute z-[55] h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-saffron/30 via-gold-soft/15 to-transparent blur-lg"
-              style={{ left: FEATHER_TIP.left, top: FEATHER_TIP.top }}
+              className="absolute z-[55] h-12 w-12 rounded-full bg-gradient-to-br from-saffron/30 via-gold-soft/15 to-transparent blur-lg"
+              style={{
+                left: FEATHER_TIP.left,
+                top: FEATHER_TIP.top,
+                transform: 'translate(-50%, -50%)',
+              }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: [0, 0.35, 0], scale: [0.8, 1.08, 1] }}
               exit={{ opacity: 0 }}
@@ -223,8 +235,9 @@ function FeatherParticleLayer({ burst, reduced, interacting }) {
           style={{
             left: FEATHER_TIP.left,
             top: FEATHER_TIP.top,
-            transform: 'translate(-50%, -50%)',
+            transform: 'translate(0, 0)',
           }}
+          aria-hidden
         >
           <InkTrail burst={burst} reduced={reduced} />
           <FeatherSparkles burst={burst} reduced={reduced} />
@@ -386,6 +399,14 @@ function LiterarySymbol({ mx, my, reduced, burst, onFeatherClick, interacting })
             opacity="0.9"
           />
           <path d={FEATHER_QUILL} fill="#e0782c" opacity="0.92" />
+              <circle
+                cx={FEATHER_TIP_SVG.x}
+                cy={FEATHER_TIP_SVG.y}
+                r="1.5"
+                fill="#f4a862"
+                opacity="0"
+                aria-hidden
+              />
             </svg>
           </motion.div>
         </motion.button>
