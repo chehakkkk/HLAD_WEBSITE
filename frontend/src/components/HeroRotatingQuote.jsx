@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import DecryptedText from './DecryptedText'
+import SplitText from './SplitText'
 
 const HINDI_QUOTES = [
   {
     hindi: 'निज भाषा उन्नति अहै, सब उन्नति को मूल ।',
-    english: 'Progress of one\'s own language is the root of all progress.',
+    english: "Progress of one's own language is the root of all progress.",
   },
   {
     hindi: 'साहित्य समाज का दर्पण है।',
@@ -22,6 +22,9 @@ const HINDI_QUOTES = [
 ]
 
 const ROTATE_MS = 5500
+
+const splitFrom = { opacity: 0, y: 30, filter: 'blur(10px)' }
+const splitTo = { opacity: 1, y: 0, filter: 'blur(0px)' }
 
 export default function HeroRotatingQuote({ reduced = false }) {
   const [index, setIndex] = useState(0)
@@ -47,34 +50,36 @@ export default function HeroRotatingQuote({ reduced = false }) {
         aria-hidden
       />
 
-      <div className="relative min-h-[3.25rem] md:min-h-[3.5rem]">
+      <div className="relative min-h-[3.5rem] w-full md:min-h-[4rem]">
         <AnimatePresence mode="wait">
           <motion.div
             key={`hindi-${index}`}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
-            <p className="font-hindi text-lg leading-relaxed text-charcoal md:text-xl">
-              {reduced ? (
-                quote.hindi
-              ) : (
-                <DecryptedText
-                  key={`decrypt-${index}`}
-                  text={quote.hindi}
-                  animateOn="view"
-                  sequential
-                  revealDirection="center"
-                  speed={40}
-                  maxIterations={15}
-                  useOriginalCharsOnly
-                  parentClassName="block w-full"
-                  className="text-charcoal"
-                  encryptedClassName="text-saffron/35"
-                />
-              )}
-            </p>
+            {reduced ? (
+              <p className="font-hindi text-center text-lg leading-relaxed text-charcoal md:text-left md:text-xl">
+                {quote.hindi}
+              </p>
+            ) : (
+              <SplitText
+                key={`split-${index}`}
+                text={quote.hindi}
+                tag="p"
+                className="font-hindi w-full text-lg leading-relaxed text-charcoal md:text-xl"
+                splitType="chars"
+                delay={40}
+                duration={0.8}
+                ease="power3.out"
+                textAlign="center"
+                animateOnMount
+                from={splitFrom}
+                to={splitTo}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
       </div>
@@ -82,11 +87,11 @@ export default function HeroRotatingQuote({ reduced = false }) {
       <AnimatePresence mode="wait">
         <motion.p
           key={`en-${index}`}
-          className="font-display relative mt-3 text-base italic leading-relaxed text-charcoal-muted"
-          initial={{ opacity: 0, y: 4 }}
+          className="font-display relative mt-3 text-center text-base italic leading-relaxed text-charcoal-muted md:text-left"
+          initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1], delay: 0.08 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
         >
           &ldquo;{quote.english}&rdquo;
         </motion.p>
