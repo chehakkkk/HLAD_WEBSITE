@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 import HeroSection from '../components/HeroSection'
-import EventsSection from '../components/EventsSection'
-import GallerySection from '../components/GallerySection'
 import AboutSection from '../components/AboutSection'
+import EventsSection from '../components/EventsSection'
 import TeamSection from '../components/TeamSection'
+import GallerySection from '../components/GallerySection'
 import TestimonialsSection from '../components/TestimonialsSection'
 import ForumTeaser from '../components/home/ForumTeaser'
+import FaqSection from '../components/FaqSection'
 import { useNavigationSection } from '../context/NavigationContext'
 
-/** Sections that correspond to navbar hash targets (order matches scroll flow). */
-const SECTION_IDS = ['home', 'events', 'gallery', 'about', 'team', 'testimonials', 'discussions']
+const SECTION_IDS = ['home', 'about', 'events', 'team', 'gallery', 'testimonials', 'discussions', 'faq']
 
 export default function HomePage() {
   const { setActiveSectionId } = useNavigationSection()
@@ -35,12 +35,13 @@ export default function HomePage() {
   return (
     <main>
       <HeroSection />
-      <EventsSection />
-      <GallerySection />
       <AboutSection />
+      <EventsSection />
       <TeamSection />
+      <GallerySection />
       <TestimonialsSection />
       <ForumTeaser />
+      <FaqSection />
     </main>
   )
 }

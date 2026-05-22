@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { MEMBER_CATEGORIES } from '../constants/hlad'
-import { useForum } from './ForumContext'
 
 const STORAGE_KEY = 'hlad-members-v1'
 
@@ -104,58 +103,41 @@ function normalizeState(raw) {
 const MembersContext = createContext(null)
 
 export function MembersProvider({ children }) {
-  const { adminSession } = useForum()
   const [members, setMembers] = useState(() => normalizeState(loadJson(STORAGE_KEY, null)))
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(members))
   }, [members])
 
-  const addMember = useCallback(
-    (payload) => {
-      if (!adminSession) return null
-      const m = normalizeMember({ ...payload, id: uid() })
-      if (!m) return null
-      setMembers((prev) => [...prev, m])
-      return m.id
-    },
-    [adminSession],
-  )
+  const addMember = useCallback((payload) => {
+    const m = normalizeMember({ ...payload, id: uid() })
+    if (!m) return null
+    setMembers((prev) => [...prev, m])
+    return m.id
+  }, [])
 
-  const updateMember = useCallback(
-    (id, payload) => {
-      if (!adminSession) return
-      setMembers((prev) =>
-        prev.map((m) => {
-          if (m.id !== id) return m
-          const merged = {
-            ...m,
-            ...payload,
-            id,
-            social: { ...m.social, ...(payload.social || {}) },
-          }
-          return normalizeMember(merged) || m
-        }),
-      )
-    },
-    [adminSession],
-  )
+  const updateMember = useCallback((id, payload) => {
+    setMembers((prev) =>
+      prev.map((m) => {
+        if (m.id !== id) return m
+        const merged = {
+          ...m,
+          ...payload,
+          id,
+          social: { ...m.social, ...(payload.social || {}) },
+        }
+        return normalizeMember(merged) || m
+      }),
+    )
+  }, [])
 
-  const removeMember = useCallback(
-    (id) => {
-      if (!adminSession) return
-      setMembers((prev) => prev.filter((m) => m.id !== id))
-    },
-    [adminSession],
-  )
+  const removeMember = useCallback((id) => {
+    setMembers((prev) => prev.filter((m) => m.id !== id))
+  }, [])
 
-  const setFeatured = useCallback(
-    (id, featured) => {
-      if (!adminSession) return
-      setMembers((prev) => prev.map((m) => (m.id === id ? { ...m, featured: Boolean(featured) } : m)))
-    },
-    [adminSession],
-  )
+  const setFeatured = useCallback((id, featured) => {
+    setMembers((prev) => prev.map((m) => (m.id === id ? { ...m, featured: Boolean(featured) } : m)))
+  }, [])
 
   const value = useMemo(
     () => ({
