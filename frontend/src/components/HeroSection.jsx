@@ -607,35 +607,7 @@ export default function HeroSection() {
             hidden: {},
             show: { transition: { staggerChildren: 0.09, delayChildren: 0.12 } },
           }}
-        >
-          <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 24 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] } },
-            }}
-            className="mb-6 flex w-fit items-center gap-3 rounded-2xl border border-white/70 bg-white/60 p-3 pr-5 shadow-[0_12px_40px_rgba(42,34,28,0.08)] backdrop-blur-md md:mb-8"
-          >
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-saffron to-saffron-deep text-lg text-white shadow-md">
-              📖
-            </div>
-            <div>
-              <span className="font-body inline-block rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-charcoal">
-                Since 2010
-              </span>
-              <div className="font-display text-lg font-bold text-charcoal">HLAD</div>
-              <div className="font-hindi text-sm font-medium text-saffron">हिंदी साहित्य</div>
-            </div>
-          </motion.div>
-
-          <motion.h1
-            variants={{
-              hidden: { opacity: 0, y: 28 },
-              show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
-            }}
-            className="font-hindi text-[clamp(3.2rem,10vw,5.5rem)] font-bold leading-[1.05] tracking-tight text-charcoal"
-          >
-            ह्लाद
-          </motion.h1>
+        >          
 
           <motion.h2
             variants={{
