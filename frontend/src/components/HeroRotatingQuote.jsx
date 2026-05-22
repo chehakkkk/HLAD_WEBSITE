@@ -40,7 +40,7 @@ export default function HeroRotatingQuote({ reduced = false }) {
   const quote = HINDI_QUOTES[index]
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/80 border-l-4 border-saffron bg-white/70 p-6 pl-6 shadow-[0_20px_60px_rgba(42,34,28,0.1)] ring-1 ring-saffron/10 backdrop-blur-xl md:pl-7">
+    <div className="relative flex w-full flex-col items-stretch overflow-hidden rounded-2xl border border-white/80 border-l-4 border-saffron bg-white/70 px-6 py-6 text-left shadow-[0_20px_60px_rgba(42,34,28,0.1)] ring-1 ring-saffron/10 backdrop-blur-xl sm:px-7 sm:py-7">
       <div
         className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-saffron/25 to-transparent blur-2xl"
         aria-hidden
@@ -50,18 +50,18 @@ export default function HeroRotatingQuote({ reduced = false }) {
         aria-hidden
       />
 
-      <div className="relative min-h-[3.5rem] w-full md:min-h-[4rem]">
+      <div className="relative min-h-[4rem] w-full sm:min-h-[4.5rem]">
         <AnimatePresence mode="wait">
           <motion.div
             key={`hindi-${index}`}
-            className="w-full"
+            className="w-full text-left"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             {reduced ? (
-              <p className="font-hindi text-center text-lg leading-relaxed text-charcoal md:text-left md:text-xl">
+              <p className="font-hindi text-xl leading-[1.75] text-charcoal sm:text-2xl">
                 {quote.hindi}
               </p>
             ) : (
@@ -69,12 +69,12 @@ export default function HeroRotatingQuote({ reduced = false }) {
                 key={`split-${index}`}
                 text={quote.hindi}
                 tag="p"
-                className="font-hindi w-full text-lg leading-relaxed text-charcoal md:text-xl"
+                className="font-hindi block w-full text-left text-xl leading-[1.75] text-charcoal sm:text-2xl"
                 splitType="chars"
                 delay={40}
                 duration={0.8}
                 ease="power3.out"
-                textAlign="center"
+                textAlign="left"
                 animateOnMount
                 from={splitFrom}
                 to={splitTo}
@@ -87,7 +87,7 @@ export default function HeroRotatingQuote({ reduced = false }) {
       <AnimatePresence mode="wait">
         <motion.p
           key={`en-${index}`}
-          className="font-display relative mt-3 text-center text-base italic leading-relaxed text-charcoal-muted md:text-left"
+          className="font-display relative mt-4 max-w-full text-left text-sm leading-relaxed text-charcoal-muted italic sm:text-base"
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -4 }}

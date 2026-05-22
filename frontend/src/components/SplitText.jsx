@@ -176,7 +176,8 @@ export default function SplitText({
   const style = {
     textAlign,
     overflow: 'hidden',
-    display: 'inline-block',
+    display: textAlign === 'left' || textAlign === 'right' ? 'block' : 'inline-block',
+    width: textAlign === 'left' || textAlign === 'right' ? '100%' : undefined,
     whiteSpace: 'normal',
     wordWrap: 'break-word',
     willChange: 'transform, opacity',

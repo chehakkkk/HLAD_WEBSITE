@@ -34,39 +34,40 @@ const literaryTags = [
 
 const HINDI_LETTER_POOL = ['क', 'व', 'स', 'त', 'अ', 'ह', 'शब्द']
 
-/** Curved ink stream from quill tip: outward arc, lifting gently upward */
+/** Curved ink stream: quill tip → smooth arc right with gentle lift */
 function buildLetterBurst(seed) {
   const count = 6
+  const spacing = 24
   return Array.from({ length: count }, (_, i) => {
-    const t = 0.12 + i * 0.13
-    const endX = 8 + t * 38 + (seed % 3) * 2
-    const endY = -12 - t * 52 - i * 3
-    const midX = endX * 0.42
-    const midY = endY * 0.28
+    const endX = 20 + i * spacing
+    const endY = -5 - i * 3.5 - (i > 2 ? 2 : 0)
+    const midX = endX * 0.55
+    const midY = endY * 0.4
     const char = HINDI_LETTER_POOL[i % HINDI_LETTER_POOL.length]
     return {
       id: `${seed}-${i}`,
       char,
       x: [0, midX, endX],
       y: [0, midY, endY],
-      rotate: [-4, 2, -2 + (i % 3)],
-      delay: 0.15 + i * 0.14,
-      duration: 2.8 + i * 0.1,
-      size: char.length > 1 ? 'text-sm md:text-base' : 'text-base md:text-lg',
+      rotate: [0, -1.5, 0],
+      delay: 0.22 + i * 0.2,
+      duration: 3.4 + i * 0.12,
+      size: char.length > 1 ? 'text-lg md:text-xl' : 'text-xl md:text-2xl',
     }
   })
 }
 
 function buildSparkles(seed) {
   return Array.from({ length: 4 }, (_, i) => {
-    const t = 0.2 + i * 0.18
+    const endX = 18 + i * 22
+    const endY = -4 - i * 3
     return {
       id: `${seed}-s-${i}`,
-      x: [0, 6 + t * 18, 10 + t * 28],
-      y: [0, -4 - t * 16, -8 - t * 34],
-      size: 2 + (i % 2),
-      delay: 0.1 + i * 0.1,
-      duration: 2.2,
+      x: [0, endX * 0.55, endX],
+      y: [0, endY * 0.4, endY],
+      size: 3 + (i % 2),
+      delay: 0.18 + i * 0.16,
+      duration: 2.8,
     }
   })
 }
@@ -80,32 +81,32 @@ function HindiLetterBurst({ burst, reduced }) {
       {particles.map((p) => (
         <motion.span
           key={p.id}
-          className={`font-hindi absolute left-0 top-0 ${p.size} font-semibold text-saffron-deep`}
+          className={`font-hindi absolute left-0 top-0 z-[6] ${p.size} font-bold leading-none text-saffron-deep`}
           style={{
-            textShadow: '0 0 16px rgba(244, 168, 98, 0.7), 0 0 28px rgba(224, 120, 44, 0.4)',
-            filter: 'blur(0.2px)',
+            textShadow:
+              '0 1px 2px rgba(42, 34, 28, 0.25), 0 0 20px rgba(252, 214, 160, 0.95), 0 0 36px rgba(244, 168, 98, 0.75), 0 0 48px rgba(224, 120, 44, 0.45)',
           }}
-          initial={{ opacity: 0, x: 0, y: 0, scale: 0.5, rotate: 0, filter: 'blur(6px)' }}
+          initial={{ opacity: 0, x: 0, y: 0, scale: 0.7, rotate: 0, filter: 'blur(3px)' }}
           animate={{
-            opacity: [0, 0, 0.75, 0.6, 0],
+            opacity: [0, 0.35, 1, 0.92, 0.65, 0],
             x: p.x,
             y: p.y,
-            scale: [0.5, 0.72, 0.92, 0.82],
+            scale: [0.7, 0.88, 1.05, 1, 0.95],
             rotate: p.rotate,
-            filter: ['blur(6px)', 'blur(3px)', 'blur(1px)', 'blur(4px)'],
+            filter: ['blur(3px)', 'blur(1px)', 'blur(0px)', 'blur(0px)', 'blur(2px)'],
           }}
           exit={{ opacity: 0 }}
           transition={{
             duration: p.duration,
             delay: p.delay,
-            ease: [0.22, 1, 0.36, 1],
-            opacity: { times: [0, 0.1, 0.28, 0.55, 1], duration: p.duration, delay: p.delay },
+            ease: [0.25, 0.1, 0.25, 1],
+            opacity: { times: [0, 0.08, 0.22, 0.45, 0.72, 1], duration: p.duration, delay: p.delay },
           }}
         >
-            <span className="rounded-lg border border-white/40 bg-white/25 px-1.5 py-0.5 backdrop-blur-md">
-              {p.char}
-            </span>
-          </motion.span>
+          <span className="inline-block rounded-lg border border-saffron/35 bg-white/65 px-2 py-1 text-saffron-deep shadow-[0_4px_20px_rgba(224,120,44,0.35)] backdrop-blur-sm ring-1 ring-white/50">
+            {p.char}
+          </span>
+        </motion.span>
         ))}
     </AnimatePresence>
   )
@@ -116,30 +117,31 @@ function InkTrail({ burst, reduced }) {
 
   return (
     <motion.svg
-      className="pointer-events-none absolute left-0 top-0 h-24 w-28 overflow-visible"
-      viewBox="0 0 112 96"
+      className="pointer-events-none absolute left-0 top-0 h-20 w-44 overflow-visible"
+      viewBox="0 0 176 72"
       fill="none"
       aria-hidden
       initial={{ opacity: 0 }}
-      animate={{ opacity: [0, 0.45, 0] }}
-      transition={{ duration: 2.4, ease: [0.16, 1, 0.3, 1] }}
+      animate={{ opacity: [0, 0.65, 0.2] }}
+      transition={{ duration: 3.2, ease: [0.16, 1, 0.3, 1] }}
     >
       <defs>
-        <linearGradient id="ink-trail-grad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="rgba(224, 120, 44, 0.5)" />
+        <linearGradient id="ink-trail-grad" x1="0%" y1="50%" x2="100%" y2="30%">
+          <stop offset="0%" stopColor="rgba(224, 120, 44, 0.75)" />
+          <stop offset="55%" stopColor="rgba(244, 168, 98, 0.45)" />
           <stop offset="100%" stopColor="rgba(244, 168, 98, 0)" />
         </linearGradient>
       </defs>
       <motion.path
-        d="M 4 88 Q 28 72 52 48 T 88 8"
+        d="M 2 58 Q 52 52 98 32 T 168 10"
         stroke="url(#ink-trail-grad)"
-        strokeWidth="2"
+        strokeWidth="2.5"
         strokeLinecap="round"
         fill="none"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: [0, 1, 1] }}
-        transition={{ duration: 2.2, ease: [0.22, 1, 0.36, 1] }}
-        style={{ filter: 'blur(1px)' }}
+        transition={{ duration: 3, ease: [0.25, 0.1, 0.25, 1] }}
+        style={{ filter: 'blur(0.8px)' }}
       />
     </motion.svg>
   )
@@ -154,23 +156,23 @@ function FeatherSparkles({ burst, reduced }) {
       {sparkles.map((s) => (
         <motion.span
           key={s.id}
-          className="absolute left-0 top-0 rounded-full bg-gradient-to-br from-gold-soft to-saffron"
+          className="absolute left-0 top-0 z-[5] rounded-full bg-gradient-to-br from-gold-soft to-saffron"
           style={{
             width: s.size,
             height: s.size,
-            boxShadow: '0 0 6px rgba(252, 214, 160, 0.8), 0 0 12px rgba(224, 120, 44, 0.35)',
+            boxShadow: '0 0 10px rgba(252, 214, 160, 0.95), 0 0 18px rgba(244, 168, 98, 0.7)',
           }}
           initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
           animate={{
-            opacity: [0, 0, 0.85, 0],
-            scale: [0, 0.6, 1, 0.4],
+            opacity: [0, 0.4, 1, 0],
+            scale: [0, 0.7, 1.15, 0.5],
             x: s.x,
             y: s.y,
           }}
           transition={{
             duration: s.duration,
             delay: s.delay,
-            ease: [0.22, 1, 0.36, 1],
+            ease: [0.25, 0.1, 0.25, 1],
           }}
         />
       ))}
@@ -180,10 +182,10 @@ function FeatherSparkles({ burst, reduced }) {
 
 function FeatherTipEmitter({ burst, reduced, children }) {
   return (
-    <div className="relative inline-block">
+    <div className="relative inline-block overflow-visible">
       {children}
       <div
-        className="pointer-events-none absolute z-[4] h-0 w-0"
+        className="pointer-events-none absolute z-[5] h-0 w-0 overflow-visible"
         style={{
           left: FEATHER_TIP.left,
           top: FEATHER_TIP.top,
@@ -250,7 +252,7 @@ function LiterarySymbol({ mx, my, reduced, burst, onFeatherClick, interacting })
         aria-label="Interact with the literary feather — releases glowing Hindi letters"
         onClick={onFeatherClick}
         disabled={reduced}
-        className="group relative flex cursor-pointer items-center justify-center border-0 bg-transparent p-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-saffron disabled:cursor-default md:hover:drop-shadow-[0_0_28px_rgba(244,168,98,0.35)]"
+        className="group relative flex cursor-pointer items-center justify-center overflow-visible border-0 bg-transparent p-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-saffron disabled:cursor-default md:hover:drop-shadow-[0_0_28px_rgba(244,168,98,0.35)]"
       >
         <motion.div
           className="relative flex items-center justify-center"
@@ -541,7 +543,7 @@ export default function HeroSection() {
 
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-5 px-4 pb-4 sm:gap-7 md:grid md:grid-cols-2 md:items-center md:gap-6 md:px-6 md:pb-0 lg:gap-10">
         <motion.div
-          className="order-1 relative flex w-full min-h-[220px] max-w-sm items-center justify-center sm:min-h-[260px] sm:max-w-md md:order-2 md:max-w-none md:min-h-[520px]"
+          className="order-1 relative flex w-full min-h-[220px] max-w-sm items-center justify-center overflow-visible sm:min-h-[260px] sm:max-w-md md:order-2 md:max-w-none md:min-h-[520px]"
           style={{ x: parallaxX, y: parallaxY }}
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
