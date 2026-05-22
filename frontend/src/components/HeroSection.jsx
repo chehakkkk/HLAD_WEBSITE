@@ -34,43 +34,47 @@ const literaryTags = [
 
 const HINDI_LETTER_POOL = ['क', 'व', 'स', 'त', 'अ', 'ह', 'शब्द']
 
-/** Curved ink stream: quill tip → smooth arc right with gentle lift */
+/** Curved ink stream: lower quill tip → long arc right with gentle lift */
 function buildLetterBurst(seed) {
   const count = 6
-  const spacing = 24
+  const spacing = 38
   return Array.from({ length: count }, (_, i) => {
-    const endX = 20 + i * spacing
-    const endY = -5 - i * 3.5 - (i > 2 ? 2 : 0)
-    const midX = endX * 0.55
-    const midY = endY * 0.4
+    const lane = i % 2 === 0 ? 0 : -10
+    const endX = 32 + i * spacing
+    const endY = lane - 10 - i * 4
+    const midX = endX * 0.48
+    const midY = endY * 0.32
     const char = HINDI_LETTER_POOL[i % HINDI_LETTER_POOL.length]
     return {
       id: `${seed}-${i}`,
       char,
       x: [0, midX, endX],
       y: [0, midY, endY],
-      rotate: [0, -1.5, 0],
-      delay: 0.22 + i * 0.2,
-      duration: 3.4 + i * 0.12,
-      size: char.length > 1 ? 'text-lg md:text-xl' : 'text-xl md:text-2xl',
+      rotate: 0,
+      delay: 0.25 + i * 0.22,
+      duration: 3.6 + i * 0.1,
+      size: char.length > 1 ? 'text-xl md:text-2xl' : 'text-2xl md:text-3xl',
     }
   })
 }
 
 function buildSparkles(seed) {
   return Array.from({ length: 4 }, (_, i) => {
-    const endX = 18 + i * 22
-    const endY = -4 - i * 3
+    const endX = 40 + i * 34
+    const endY = -8 - i * 5
     return {
       id: `${seed}-s-${i}`,
-      x: [0, endX * 0.55, endX],
-      y: [0, endY * 0.4, endY],
+      x: [0, endX * 0.5, endX],
+      y: [0, endY * 0.35, endY],
       size: 3 + (i % 2),
-      delay: 0.18 + i * 0.16,
-      duration: 2.8,
+      delay: 0.2 + i * 0.18,
+      duration: 3.2,
     }
   })
 }
+
+const LETTER_GLOW =
+  '0 1px 0 rgba(255,255,255,0.9), 0 2px 4px rgba(42,34,28,0.12), 0 0 14px rgba(252,214,160,0.55)'
 
 function HindiLetterBurst({ burst, reduced }) {
   const particles = useMemo(() => (burst ? buildLetterBurst(burst) : []), [burst])
@@ -81,33 +85,41 @@ function HindiLetterBurst({ burst, reduced }) {
       {particles.map((p) => (
         <motion.span
           key={p.id}
-          className={`font-hindi absolute left-0 top-0 z-[6] ${p.size} font-bold leading-none text-saffron-deep`}
-          style={{
-            textShadow:
-              '0 1px 2px rgba(42, 34, 28, 0.25), 0 0 20px rgba(252, 214, 160, 0.95), 0 0 36px rgba(244, 168, 98, 0.75), 0 0 48px rgba(224, 120, 44, 0.45)',
-          }}
-          initial={{ opacity: 0, x: 0, y: 0, scale: 0.7, rotate: 0, filter: 'blur(3px)' }}
+          className={`font-hindi absolute left-0 top-0 ${p.size} font-bold leading-none will-change-transform`}
+          style={{ transform: 'translateZ(0)' }}
+          initial={{ opacity: 0, x: 0, y: 0, scale: 0.75 }}
           animate={{
-            opacity: [0, 0.35, 1, 0.92, 0.65, 0],
+            opacity: [0, 0.5, 1, 1, 1, 0.75, 0],
             x: p.x,
             y: p.y,
-            scale: [0.7, 0.88, 1.05, 1, 0.95],
-            rotate: p.rotate,
-            filter: ['blur(3px)', 'blur(1px)', 'blur(0px)', 'blur(0px)', 'blur(2px)'],
+            scale: [0.75, 0.92, 1.06, 1.04, 1.02, 1],
           }}
           exit={{ opacity: 0 }}
           transition={{
             duration: p.duration,
             delay: p.delay,
-            ease: [0.25, 0.1, 0.25, 1],
-            opacity: { times: [0, 0.08, 0.22, 0.45, 0.72, 1], duration: p.duration, delay: p.delay },
+            ease: [0.22, 1, 0.36, 1],
+            opacity: { times: [0, 0.1, 0.2, 0.4, 0.65, 0.85, 1], duration: p.duration, delay: p.delay },
           }}
         >
-          <span className="inline-block rounded-lg border border-saffron/35 bg-white/65 px-2 py-1 text-saffron-deep shadow-[0_4px_20px_rgba(224,120,44,0.35)] backdrop-blur-sm ring-1 ring-white/50">
-            {p.char}
+          <span className="relative inline-block">
+            <motion.span
+              aria-hidden
+              className="pointer-events-none absolute -inset-1 rounded-lg bg-saffron/25"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: [0, 0.5, 0.35, 0], scale: [0.8, 1.15, 1.3, 1.4] }}
+              transition={{ duration: p.duration, delay: p.delay, ease: [0.22, 1, 0.36, 1] }}
+              style={{ filter: 'blur(6px)' }}
+            />
+            <span
+              className="relative z-[1] inline-block rounded-md border border-saffron/50 bg-white/92 px-2.5 py-1 text-[#9a4210] shadow-[0_2px_12px_rgba(42,34,28,0.12),0_4px_24px_rgba(224,120,44,0.28)] ring-1 ring-white"
+              style={{ textShadow: LETTER_GLOW, WebkitFontSmoothing: 'antialiased' }}
+            >
+              {p.char}
+            </span>
           </span>
         </motion.span>
-        ))}
+      ))}
     </AnimatePresence>
   )
 }
@@ -117,31 +129,30 @@ function InkTrail({ burst, reduced }) {
 
   return (
     <motion.svg
-      className="pointer-events-none absolute left-0 top-0 h-20 w-44 overflow-visible"
-      viewBox="0 0 176 72"
+      className="pointer-events-none absolute left-0 top-0 z-[1] h-24 w-56 overflow-visible sm:w-64"
+      viewBox="0 0 240 80"
       fill="none"
       aria-hidden
       initial={{ opacity: 0 }}
-      animate={{ opacity: [0, 0.65, 0.2] }}
-      transition={{ duration: 3.2, ease: [0.16, 1, 0.3, 1] }}
+      animate={{ opacity: [0, 0.5, 0.15] }}
+      transition={{ duration: 3.4, ease: [0.16, 1, 0.3, 1] }}
     >
       <defs>
-        <linearGradient id="ink-trail-grad" x1="0%" y1="50%" x2="100%" y2="30%">
-          <stop offset="0%" stopColor="rgba(224, 120, 44, 0.75)" />
-          <stop offset="55%" stopColor="rgba(244, 168, 98, 0.45)" />
+        <linearGradient id="ink-trail-grad" x1="0%" y1="60%" x2="100%" y2="20%">
+          <stop offset="0%" stopColor="rgba(224, 120, 44, 0.55)" />
+          <stop offset="70%" stopColor="rgba(244, 168, 98, 0.25)" />
           <stop offset="100%" stopColor="rgba(244, 168, 98, 0)" />
         </linearGradient>
       </defs>
       <motion.path
-        d="M 2 58 Q 52 52 98 32 T 168 10"
+        d="M 2 62 Q 80 54 150 28 T 232 6"
         stroke="url(#ink-trail-grad)"
-        strokeWidth="2.5"
+        strokeWidth="2"
         strokeLinecap="round"
         fill="none"
         initial={{ pathLength: 0 }}
         animate={{ pathLength: [0, 1, 1] }}
-        transition={{ duration: 3, ease: [0.25, 0.1, 0.25, 1] }}
-        style={{ filter: 'blur(0.8px)' }}
+        transition={{ duration: 3.2, ease: [0.22, 1, 0.36, 1] }}
       />
     </motion.svg>
   )
@@ -156,7 +167,7 @@ function FeatherSparkles({ burst, reduced }) {
       {sparkles.map((s) => (
         <motion.span
           key={s.id}
-          className="absolute left-0 top-0 z-[5] rounded-full bg-gradient-to-br from-gold-soft to-saffron"
+          className="absolute left-0 top-0 z-[2] rounded-full bg-gradient-to-br from-gold-soft to-saffron"
           style={{
             width: s.size,
             height: s.size,
@@ -180,21 +191,47 @@ function FeatherSparkles({ burst, reduced }) {
   )
 }
 
-function FeatherTipEmitter({ burst, reduced, children }) {
+const FEATHER_SVG_CLASS =
+  'relative block w-[min(78vw,320px)] max-w-full sm:w-[min(85vw,380px)] md:w-[min(92vw,440px)]'
+
+/** Dedicated layer: particles render above feather glows (isolated stacking) */
+function FeatherParticleLayer({ burst, reduced, interacting }) {
+  if (reduced) return null
+
   return (
-    <div className="relative inline-block overflow-visible">
-      {children}
-      <div
-        className="pointer-events-none absolute z-[5] h-0 w-0 overflow-visible"
-        style={{
-          left: FEATHER_TIP.left,
-          top: FEATHER_TIP.top,
-          transform: 'translate(-50%, -50%)',
-        }}
-      >
-        <InkTrail burst={burst} reduced={reduced} />
-        <HindiLetterBurst burst={burst} reduced={reduced} />
-        <FeatherSparkles burst={burst} reduced={reduced} />
+    <div
+      className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-visible"
+      style={{ isolation: 'isolate' }}
+      aria-hidden
+    >
+      <div className={`relative ${FEATHER_SVG_CLASS}`}>
+        <AnimatePresence>
+          {interacting && (
+            <motion.div
+              key="feather-pulse"
+              className="absolute z-[55] h-14 w-14 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-saffron/30 via-gold-soft/15 to-transparent blur-lg"
+              style={{ left: FEATHER_TIP.left, top: FEATHER_TIP.top }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: [0, 0.35, 0], scale: [0.8, 1.08, 1] }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+            />
+          )}
+        </AnimatePresence>
+        <div
+          className="absolute z-[60] h-0 w-0 overflow-visible"
+          style={{
+            left: FEATHER_TIP.left,
+            top: FEATHER_TIP.top,
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          <InkTrail burst={burst} reduced={reduced} />
+          <FeatherSparkles burst={burst} reduced={reduced} />
+          <div className="relative z-[70]">
+            <HindiLetterBurst burst={burst} reduced={reduced} />
+          </div>
+        </div>
       </div>
     </div>
   )
@@ -209,10 +246,17 @@ function LiterarySymbol({ mx, my, reduced, burst, onFeatherClick, interacting })
   const innerY = useTransform(my, [0, 1], reduced ? [0, 0] : [-6, 6])
   const tilt = useTransform(mx, [0, 1], reduced ? [0, 0] : [-2, 2])
 
+  const featherMotionStyle = {
+    x: innerX,
+    y: innerY,
+    rotate: tilt,
+    transformOrigin: `${FEATHER_TIP.left} ${FEATHER_TIP.top}`,
+  }
+
   return (
-    <div className="relative z-[2] flex h-full min-h-[220px] w-full items-center justify-center sm:min-h-[260px] md:min-h-[420px]">
+    <div className="relative z-[2] flex h-full min-h-[220px] w-full items-center justify-center overflow-visible sm:min-h-[260px] md:min-h-[420px]">
       <motion.div
-        className="pointer-events-none absolute inset-0 flex items-center justify-center"
+        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
         animate={reduced ? undefined : { y: [0, -10, 0] }}
         transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
       >
@@ -233,45 +277,21 @@ function LiterarySymbol({ mx, my, reduced, burst, onFeatherClick, interacting })
         />
       </motion.div>
 
-      <AnimatePresence>
-        {interacting && !reduced && (
-          <motion.div
-            key="feather-pulse"
-            className="pointer-events-none absolute z-[1] h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-saffron/45 via-gold-soft/25 to-transparent blur-2xl"
-            style={{ left: FEATHER_TIP.left, top: FEATHER_TIP.top }}
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: [0, 0.55, 0], scale: [0.7, 1.15, 1] }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          />
-        )}
-      </AnimatePresence>
-
-      <motion.button
-        type="button"
-        aria-label="Interact with the literary feather — releases glowing Hindi letters"
-        onClick={onFeatherClick}
-        disabled={reduced}
-        className="group relative flex cursor-pointer items-center justify-center overflow-visible border-0 bg-transparent p-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-saffron disabled:cursor-default md:hover:drop-shadow-[0_0_28px_rgba(244,168,98,0.35)]"
-      >
-        <motion.div
-          className="relative flex items-center justify-center"
-          style={{
-            x: innerX,
-            y: innerY,
-            rotate: tilt,
-            transformOrigin: `${FEATHER_TIP.left} ${FEATHER_TIP.top}`,
-          }}
-          animate={reduced ? undefined : GENTLE_SWAY}
-          transition={SWAY_TRANSITION}
+      <div className="relative z-10 flex items-center justify-center">
+        <motion.button
+          type="button"
+          aria-label="Interact with the literary feather — releases glowing Hindi letters"
+          onClick={onFeatherClick}
+          disabled={reduced}
+          className="group relative flex cursor-pointer items-center justify-center overflow-visible border-0 bg-transparent p-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-saffron disabled:cursor-default md:hover:drop-shadow-[0_0_28px_rgba(244,168,98,0.35)]"
         >
-          <FeatherTipEmitter burst={burst} reduced={reduced}>
-              <svg
-                viewBox="0 0 320 400"
-                className="relative block w-[min(78vw,320px)] max-w-full sm:w-[min(85vw,380px)] md:w-[min(92vw,440px)]"
-                fill="none"
-                aria-hidden
-              >
+          <motion.div
+            className="relative flex items-center justify-center"
+            style={featherMotionStyle}
+            animate={reduced ? undefined : GENTLE_SWAY}
+            transition={SWAY_TRANSITION}
+          >
+            <svg viewBox="0 0 320 400" className={FEATHER_SVG_CLASS} fill="none" aria-hidden>
           <defs>
             <linearGradient id={`ghost-${rid}`} x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#c45f18" stopOpacity="0.5" />
@@ -366,10 +386,20 @@ function LiterarySymbol({ mx, my, reduced, burst, onFeatherClick, interacting })
             opacity="0.9"
           />
           <path d={FEATHER_QUILL} fill="#e0782c" opacity="0.92" />
-              </svg>
-          </FeatherTipEmitter>
-        </motion.div>
-      </motion.button>
+            </svg>
+          </motion.div>
+        </motion.button>
+      </div>
+
+      <motion.div
+        className="pointer-events-none absolute inset-0 z-50 flex items-center justify-center overflow-visible"
+        style={featherMotionStyle}
+        animate={reduced ? undefined : GENTLE_SWAY}
+        transition={SWAY_TRANSITION}
+        aria-hidden
+      >
+        <FeatherParticleLayer burst={burst} reduced={reduced} interacting={interacting} />
+      </motion.div>
     </div>
   )
 }
@@ -549,12 +579,14 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-            <div className="h-[min(80%,360px)] w-[min(80%,360px)] rounded-full bg-gradient-to-br from-saffron/30 via-gold-soft/10 to-transparent blur-3xl md:h-[min(90%,480px)] md:w-[min(90%,480px)]" />
+          <div className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center">
+            <div className="h-[min(80%,360px)] w-[min(80%,360px)] rounded-full bg-gradient-to-br from-saffron/25 via-gold-soft/8 to-transparent blur-2xl md:h-[min(90%,480px)] md:w-[min(90%,480px)]" />
           </div>
 
-          <PaperMotes reduced={reduced} />
-          <PaperFragments reduced={reduced} />
+          <div className="pointer-events-none absolute inset-0 z-[1]">
+            <PaperMotes reduced={reduced} />
+            <PaperFragments reduced={reduced} />
+          </div>
 
           {literaryTags.map((t) => (
             <motion.div
