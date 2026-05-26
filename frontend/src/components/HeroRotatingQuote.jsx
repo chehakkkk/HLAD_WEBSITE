@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import SplitText from './SplitText'
@@ -40,13 +41,14 @@ export default function HeroRotatingQuote({ reduced = false }) {
   const quote = HINDI_QUOTES[index]
 
   return (
-    <div className="relative flex w-full flex-col items-stretch overflow-hidden rounded-2xl border border-white/80 border-l-4 border-saffron bg-white/70 px-6 py-6 text-left shadow-[0_20px_60px_rgba(42,34,28,0.1)] ring-1 ring-saffron/10 backdrop-blur-xl sm:px-7 sm:py-7">
+    <div className="relative flex w-full flex-col items-stretch overflow-hidden rounded-2xl border border-saffron/30 dark:border-saffron/40 border-l-4 border-l-saffron bg-white/75 dark:bg-zinc-800/80 px-6 py-6 text-left shadow-[0_20px_60px_rgba(42,34,28,0.1)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.35)] ring-1 ring-saffron/15 dark:ring-saffron/20 backdrop-blur-xl sm:px-7 sm:py-7">
+      {/* Ambient glow blobs — slightly stronger in dark for warmth */}
       <div
-        className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-saffron/25 to-transparent blur-2xl"
+        className="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-gradient-to-br from-saffron/25 dark:from-saffron/20 to-transparent blur-2xl"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute -bottom-4 -left-4 h-20 w-20 rounded-full bg-gradient-to-tr from-gold-soft/20 to-transparent blur-xl"
+        className="pointer-events-none absolute -bottom-4 -left-4 h-20 w-20 rounded-full bg-gradient-to-tr from-gold-soft/20 dark:from-saffron/10 to-transparent blur-xl"
         aria-hidden
       />
 
@@ -61,7 +63,7 @@ export default function HeroRotatingQuote({ reduced = false }) {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             {reduced ? (
-              <p className="font-hindi text-xl leading-[1.75] text-charcoal sm:text-2xl">
+              <p className="font-hindi text-xl leading-[1.75] text-foreground sm:text-2xl">
                 {quote.hindi}
               </p>
             ) : (
@@ -69,7 +71,7 @@ export default function HeroRotatingQuote({ reduced = false }) {
                 key={`split-${index}`}
                 text={quote.hindi}
                 tag="p"
-                className="font-hindi block w-full text-left text-xl leading-[1.75] text-charcoal sm:text-2xl"
+                className="font-hindi block w-full text-left text-xl leading-[1.75] text-foreground sm:text-2xl"
                 splitType="chars"
                 delay={40}
                 duration={0.8}
@@ -87,7 +89,7 @@ export default function HeroRotatingQuote({ reduced = false }) {
       <AnimatePresence mode="wait">
         <motion.p
           key={`en-${index}`}
-          className="font-display relative mt-4 max-w-full text-left text-sm leading-relaxed text-charcoal-muted italic sm:text-base"
+          className="font-display relative mt-4 max-w-full text-left text-sm leading-relaxed text-muted-foreground italic sm:text-base"
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -4 }}
