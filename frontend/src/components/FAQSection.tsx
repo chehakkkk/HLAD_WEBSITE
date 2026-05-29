@@ -1,9 +1,14 @@
 "use client";
-
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useState } from 'react'
+import { motion, AnimatePresence } from "motion/react";
 import { HelpCircle } from "lucide-react";
-import ScrollReveal from "./ScrollReveal";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
+import ScrollReveal from './ScrollReveal'
 
 const faqs = [
   {
@@ -128,31 +133,6 @@ export function FAQSection() {
           })}
         </div>
 
-        {/* Still have questions CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-16 text-center"
-        >
-          <div className="bg-white/80 backdrop-blur-md p-10 rounded-2xl shadow-lg border border-white/70">
-            <h3 className="font-display text-2xl font-semibold text-charcoal mb-3">
-              Still Have Questions?
-            </h3>
-            <p className="font-body text-charcoal-muted mb-6">
-              We're here to help! Reach out to us and we'll get back to you promptly.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-saffron hover:bg-saffron-deep text-white px-8 py-3 rounded-xl font-display transition-all duration-300 shadow-lg hover:shadow-xl">
-                Contact Us
-              </button>
-              <button className="bg-white/70 hover:bg-white text-charcoal px-8 py-3 rounded-xl border border-charcoal/10 font-display transition-all duration-300">
-                Join Our Community
-              </button>
-            </div>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

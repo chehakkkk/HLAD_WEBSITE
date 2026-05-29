@@ -1,20 +1,9 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+"use client";
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 import { MEMBER_CATEGORIES } from '../constants/hlad'
-
-const STORAGE_KEY = 'hlad-members-v1'
 
 function uid() {
   return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`
-}
-
-function loadJson(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key)
-    if (!raw) return fallback
-    return JSON.parse(raw)
-  } catch {
-    return fallback
-  }
 }
 
 const seedMembers = [
@@ -94,20 +83,10 @@ function normalizeMember(m) {
   }
 }
 
-function normalizeState(raw) {
-  if (!raw || !Array.isArray(raw)) return [...seedMembers]
-  const list = raw.map(normalizeMember).filter(Boolean)
-  return list.length ? list : [...seedMembers]
-}
-
 const MembersContext = createContext(null)
 
 export function MembersProvider({ children }) {
-  const [members, setMembers] = useState(() => normalizeState(loadJson(STORAGE_KEY, null)))
-
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(members))
-  }, [members])
+  const [members, setMembers] = useState(() => [...seedMembers])
 
   const addMember = useCallback((payload) => {
     const m = normalizeMember({ ...payload, id: uid() })
@@ -140,20 +119,13 @@ export function MembersProvider({ children }) {
   }, [])
 
   const value = useMemo(
-    () => ({
-      members,
-      addMember,
-      updateMember,
-      removeMember,
-      setFeatured,
-    }),
+    () => ({ members, addMember, updateMember, removeMember, setFeatured }),
     [members, addMember, updateMember, removeMember, setFeatured],
   )
 
   return <MembersContext.Provider value={value}>{children}</MembersContext.Provider>
 }
 
-/* eslint-disable react-refresh/only-export-components -- hook paired with provider */
 export function useMembers() {
   const ctx = useContext(MembersContext)
   if (!ctx) throw new Error('useMembers must be used within MembersProvider')

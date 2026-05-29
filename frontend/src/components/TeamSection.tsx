@@ -1,9 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { Users, MessageCircleMore, BriefcaseBusiness, Mail } from "lucide-react";
-import ScrollReveal from "./ScrollReveal";
-
+import { ImageWithFallback } from "./shared/ImageWithFallback";
+import ScrollReveal from './ScrollReveal'
 const team = [
   {
     id: 1,

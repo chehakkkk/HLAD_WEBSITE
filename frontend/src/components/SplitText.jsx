@@ -1,11 +1,11 @@
 "use client";
 /**
- * SplitText – Framer Motion implementation.
+ * SplitText – Motion/React implementation.
  * Drop-in replacement for the GSAP SplitText version.
  * Accepts the same props used by HeroRotatingQuote.
  */
 import { useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { motion } from 'motion/react'
 
 export default function SplitText({
   text = '',
@@ -18,6 +18,7 @@ export default function SplitText({
   to   = { opacity: 1, y: 0,  filter: 'blur(0px)' },
   textAlign = 'left',
   animateOnMount = false,
+  splitType = 'chars',
 }) {
   const chars = useMemo(() => {
     const segmenter = new Intl.Segmenter("hi", { granularity: "grapheme" })

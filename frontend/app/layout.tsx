@@ -8,6 +8,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/src/components/shared/theme-provider";
+import { NavigationProvider } from "@/src/context/NavigationContext";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -67,7 +68,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <NavigationProvider>
+            {children}
+          </NavigationProvider>
         </ThemeProvider>
       </body>
     </html>

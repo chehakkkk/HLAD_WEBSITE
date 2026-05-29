@@ -1,10 +1,10 @@
 "use client";
 
 import { useCallback, useId, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion, useSpring, useTransform } from "framer-motion";
-import { BookOpen } from "lucide-react";
+import { motion, AnimatePresence, useSpring, useTransform } from "motion/react";
 import HeroRotatingQuote from "./HeroRotatingQuote";
 import MagneticButton from "./MagneticButton";
+import { Feather, BookOpen } from "lucide-react";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion";
 
 // ─── Feather geometry ─────────────────────────────────────────────────────────
@@ -528,15 +528,7 @@ export function HeroSection() {
             show: { transition: { staggerChildren: 0.09, delayChildren: 0.12 } },
           }}
         >
-          <motion.div
-            variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}
-            className="inline-flex items-center gap-2 bg-white/60 dark:bg-zinc-800/60 backdrop-blur-sm px-4 py-2 rounded-full border border-saffron/30 mb-4"
-          >
-            <BookOpen className="w-4 h-4 text-saffron" />
-            <span className="text-xs tracking-wider font-display text-charcoal">SINCE 2020</span>
-          </motion.div>
-
-          
+                   
 
           <motion.h2
             variants={{ hidden: { opacity: 0, y: 22 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } } }}

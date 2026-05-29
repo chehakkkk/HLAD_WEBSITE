@@ -1,7 +1,8 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 import { BookOpen, Users, Sparkles, Heart } from "lucide-react";
+import { ImageWithFallback } from "./shared/ImageWithFallback";
 import ScrollReveal from "./ScrollReveal";
 
 export function AboutSection() {

@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Calendar, MapPin, Clock } from "lucide-react";
+import { motion } from "motion/react";
+import { Calendar, MapPin, Clock, ArrowRight } from "lucide-react";
 import { useRef } from "react";
+import { ImageWithFallback } from "./shared/ImageWithFallback";
 import ScrollReveal from "./ScrollReveal";
 
 const events = [

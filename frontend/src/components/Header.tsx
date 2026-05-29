@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import { BookOpen, Menu, X, ChevronDown } from "lucide-react";
 // Import the ThemeToggle component
 import { ThemeToggle } from "@/src/components/ThemeToggle"; 
