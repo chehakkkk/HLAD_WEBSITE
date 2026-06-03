@@ -15,6 +15,41 @@
   --gold:           #c9a227;
   --gold-soft:      #dfc78a;
 
+  /* ── Section backgrounds – chained so adjacent edges always match ── */
+  /*
+     Page flow:  Hero → About → Events → Gallery → Team → FAQ → Footer
+     Each section's --from matches the previous section's --to.
+     Mid colours give each section its distinct identity.
+  */
+
+  /* Hero ends at this colour – About picks it up */
+  --hero-to:             #f0e8da;
+
+  /* About  (even / warm amber-parchment) */
+  --about-from:          #f0e8da;   /* = hero-to */
+  --about-mid:           #ede1ce;
+  --about-to:            #e8dac4;
+
+  /* Events (odd / cooler ivory) */
+  --events-from:         #f2ece2;   /* slightly lighter than about-to to create a lift */
+  --events-mid:          #f7f3ec;
+  --events-to:           #faf7f2;
+
+  /* Gallery (even / warm again, deeper amber) */
+  --gallery-from:        #f5ede0;   /* noticeably warmer than events-to */
+  --gallery-mid:         #f0e6d4;
+  --gallery-to:          #ebe0cc;
+
+  /* Team (odd / bright cream lift) */
+  --team-from:           #f4f0e8;   /* noticeably lighter/cooler than gallery-to */
+  --team-mid:            #f9f6f0;
+  --team-to:             #fdfbf7;
+
+  /* FAQ (even / warm parchment descent) */
+  --faq-from:            #f5ede0;   /* warm, distinct from team-to */
+  --faq-mid:             #ede3d2;
+  --faq-to:              #2F2F2F;   /* blend into footer bg */
+
   /* ── shadcn/ui semantic tokens ── */
   --background:              #FFFFFF;
   --foreground:              #2F2F2F;
@@ -95,6 +130,29 @@
   --charcoal:               #e8e0d8;   /* dark→light flip */
   --charcoal-muted:         #a89f96;
 
+  /* ── Section backgrounds (dark mode) – same chain logic ── */
+  --hero-to:             #181410;
+
+  --about-from:          #181410;
+  --about-mid:           #151110;
+  --about-to:            #120f0d;
+
+  --events-from:         #1c1814;
+  --events-mid:          #201c18;
+  --events-to:           #231f1b;
+
+  --gallery-from:        #1a1511;
+  --gallery-mid:         #17130f;
+  --gallery-to:          #14100d;
+
+  --team-from:           #1e1a16;
+  --team-mid:            #221e1a;
+  --team-to:             #26221e;
+
+  --faq-from:            #1a1511;
+  --faq-mid:             #161210;
+  --faq-to:              oklch(0.145 0 0);  /* = dark background / footer */
+
   /* ── keep chart/sidebar tokens as-is ── */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17  162.48);
@@ -125,6 +183,22 @@
   --color-charcoal-muted: var(--charcoal-muted);
   --color-gold:           var(--gold);
   --color-gold-soft:      var(--gold-soft);
+  --color-hero-to:        var(--hero-to);
+  --color-about-from:     var(--about-from);
+  --color-about-mid:      var(--about-mid);
+  --color-about-to:       var(--about-to);
+  --color-events-from:    var(--events-from);
+  --color-events-mid:     var(--events-mid);
+  --color-events-to:      var(--events-to);
+  --color-gallery-from:   var(--gallery-from);
+  --color-gallery-mid:    var(--gallery-mid);
+  --color-gallery-to:     var(--gallery-to);
+  --color-team-from:      var(--team-from);
+  --color-team-mid:       var(--team-mid);
+  --color-team-to:        var(--team-to);
+  --color-faq-from:       var(--faq-from);
+  --color-faq-mid:        var(--faq-mid);
+  --color-faq-to:         var(--faq-to);
 
   /* ── shadcn/ui semantic colors ── */
   --color-background:              var(--background);
@@ -212,3 +286,88 @@
 ::selection {
   background: color-mix(in oklab, var(--saffron) 28%, transparent);
 }
+
+/* ── Per-section backgrounds – each gradient chains to next ── */
+
+.section-about {
+  background: linear-gradient(
+    to bottom,
+    var(--about-from),
+    var(--about-mid) 45%,
+    var(--about-to)
+  );
+}
+
+.section-events {
+  background: linear-gradient(
+    to bottom,
+    var(--events-from),
+    var(--events-mid) 45%,
+    var(--events-to)
+  );
+}
+
+.section-gallery {
+  background: linear-gradient(
+    to bottom,
+    var(--gallery-from),
+    var(--gallery-mid) 45%,
+    var(--gallery-to)
+  );
+}
+
+.section-team {
+  background: linear-gradient(
+    to bottom,
+    var(--team-from),
+    var(--team-mid) 45%,
+    var(--team-to)
+  );
+}
+
+.section-faq {
+  background: linear-gradient(
+    to bottom,
+    var(--faq-from),
+    var(--faq-mid) 55%,
+    var(--faq-to)
+  );
+}
+
+/* Corner glow blobs – reusable via inline style colour vars */
+.corner-glow {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 1;
+}
+.corner-glow-tr  { top: 0;    right: 0;  transform: translate(30%, -30%); }
+.corner-glow-bl  { bottom: 0; left: 0;   transform: translate(-30%, 30%); }
+.corner-glow-tl  { top: 0;    left: 0;   transform: translate(-25%, -25%); }
+.corner-glow-br  { bottom: 0; right: 0;  transform: translate(25%, 25%); }
+
+/* Hairline luminous rule at the top of each section (replaces section-edge-top) */
+.section-rule-top::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--saffron) 22%, transparent) 25%,
+    color-mix(in oklab, var(--gold) 18%, transparent) 50%,
+    color-mix(in oklab, var(--saffron) 22%, transparent) 75%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Keep old names as aliases so nothing breaks */
+.section-even { background: linear-gradient(to bottom, var(--about-from), var(--about-mid) 45%, var(--about-to)); }
+.section-odd  { background: linear-gradient(to bottom, var(--events-from), var(--events-mid) 45%, var(--events-to)); }
+.section-edge-top::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--saffron) 18%, transparent) 30%, color-mix(in oklab, var(--gold) 14%, transparent) 50%, color-mix(in oklab, var(--saffron) 18%, transparent) 70%, transparent);
+  pointer-events: none; }

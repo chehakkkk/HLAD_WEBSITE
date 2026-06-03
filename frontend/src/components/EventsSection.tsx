@@ -66,7 +66,12 @@ export function EventsSection() {
   };
 
   return (
-    <section id="events" className="bg-parchment py-24 md:py-32 relative overflow-hidden">
+    <section id="events" className="section-events section-rule-top relative overflow-hidden py-24 md:py-32">
+      {/* Corner ambient glows */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="corner-glow corner-glow-tl h-[440px] w-[440px] bg-gold/[0.05]" />
+        <div className="corner-glow corner-glow-br h-[360px] w-[360px] bg-saffron/[0.06]" />
+      </div>
       {/* Background pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div

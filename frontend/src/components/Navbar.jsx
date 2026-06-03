@@ -95,7 +95,7 @@ export default function Navbar() {
         <ThemeToggle />
           <Link
             href="/login"
-            className="font-body hidden items-center justify-center rounded-xl border-2 border-charcoal/18 bg-white/75 px-3 py-2 text-xs font-semibold text-charcoal shadow-sm backdrop-blur-sm transition-colors hover:border-saffron hover:text-saffron md:px-4 md:text-sm lg:inline-flex"
+            className="font-body hidden items-center justify-center rounded-xl border-2 border-charcoal/18 bg-white/75 px-3 py-2 text-xs font-semibold text-charcoal shadow-sm backdrop-blur-sm transition-colors hover:border-saffron hover:text-saffron dark:border-white/10 dark:bg-secondary dark:text-white dark:hover:bg-white/10 md:px-4 md:text-sm lg:inline-flex"
           >
             Admin Login
           </Link>

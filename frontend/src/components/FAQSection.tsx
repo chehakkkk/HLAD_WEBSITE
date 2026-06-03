@@ -15,13 +15,13 @@ const faqs = [
     id: 1,
     question: "What is HLAD?",
     questionHindi: "HLAD क्या है?",
-    answer: "HLAD (Hindi Literature & Debating Club) is a premier community dedicated to promoting, preserving, and celebrating Hindi literature. We organize poetry slams, book readings, workshops, and literary festivals to bring together Hindi literature enthusiasts from all walks of life.",
+    answer: "HLAD (Hindi Literature & Debating Club) is a community dedicated to promoting, preserving, and celebrating Hindi literature. We organize poetry slams, book readings, workshops, and literary festivals to bring together Hindi literature enthusiasts from all walks of life.",
   },
   {
     id: 2,
     question: "How can I become a member?",
     questionHindi: "मैं सदस्य कैसे बन सकता हूँ?",
-    answer: "Becoming a member is easy! Simply fill out our online membership form, pay the annual membership fee, and you'll gain access to all our events, workshops, and our exclusive literary magazine. Student discounts are available.",
+    answer: "Becoming a member is easy! Simply fill out our membership form, login with your credentials and you'll gain access to all our events, workshops, and our exclusive literary magazine. Student discounts are available.",
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const faqs = [
     id: 4,
     question: "What types of events do you organize?",
     questionHindi: "आप किस प्रकार के कार्यक्रम आयोजित करते हैं?",
-    answer: "We organize poetry slams (Kavi Sammelan), book club meetings, creative writing workshops, author meet-and-greets, literary festivals, and open mic nights. We also host online webinars with renowned Hindi authors.",
+    answer: "We organize poetry slams (Kavi Sammelan) in our annual flagship event 'KAVYANJALI', book club meetings, creative writing workshops, author meet-and-greets, literary festivals, and open mic nights. We also host online webinars with renowned Hindi authors.",
   },
   {
     id: 5,
@@ -45,19 +45,19 @@ const faqs = [
     id: 6,
     question: "Is there a membership fee?",
     questionHindi: "क्या कोई सदस्यता शुल्क है?",
-    answer: "Yes, we have a nominal annual membership fee that helps us organize quality events and maintain our community. It includes access to all regular events, our literary magazine, and special discounts on workshops. Student and senior citizen discounts are available.",
+    answer: "Absolutely not! We don't have any membership fee. We are a community of volunteers who are passionate about Hindi literature and want to promote it. We are open to all and we don't discriminate based on any criteria.",
   },
   {
     id: 7,
     question: "Are events hybrid or in-person?",
-    questionHindi: "क्या आप ऑनलाइन कार्यक्रम प्रदान करते हैं?",
-    answer: "Select salons stream live online; workshops and open mics are primarily in person to preserve the intimacy of shared recitation. Members across the country can join our online poetry readings and discussion forums.",
+    questionHindi: "क्या आप हिंदी साहित्य के लिए ऑनलाइन कार्यक्रम प्रदान करते हैं?",
+    answer: "Workshops and open mics are primarily in person to preserve the intimacy of shared recitation. Members across the country can join our online poetry readings and discussion forums.",
   },
   {
     id: 8,
     question: "How can I stay updated about upcoming events?",
     questionHindi: "मैं आगामी कार्यक्रमों के बारे में कैसे अपडेट रह सकता हूँ?",
-    answer: "Follow us on social media (Twitter, Instagram, LinkedIn) and subscribe to our newsletter. Members receive exclusive early access to event registrations and special announcements.",
+    answer: "Follow us on social media (Twitter, Instagram, LinkedIn) and subscribe to our website. Members receive exclusive early access to event registrations and special announcements.",
   },
 ];
 
@@ -65,9 +65,14 @@ export function FAQSection() {
   const [open, setOpen] = useState<number | null>(null);
 
   return (
-    <section id="faq" className="bg-beige/40 py-24 md:py-32 relative overflow-hidden">
+    <section id="faq" className="section-even section-edge-top py-24 md:py-32 relative overflow-hidden">
       {/* Decorative Devanagari background glyphs */}
-      <div className="absolute top-0 right-0 text-saffron/5 text-9xl font-hindi select-none pointer-events-none">क</div>
+      {/* Corner ambient glows */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="corner-glow corner-glow-tr h-[420px] w-[420px] bg-saffron/[0.08]" />
+        <div className="corner-glow corner-glow-bl h-[340px] w-[340px] bg-gold/[0.055]" />
+      </div>
+    <div className="absolute top-0 right-0 text-saffron/5 text-9xl font-hindi select-none pointer-events-none">क</div>
       <div className="absolute bottom-0 left-0 text-saffron/5 text-9xl font-hindi select-none pointer-events-none">ह</div>
 
       <div className="mx-auto max-w-3xl px-4 md:px-6 relative z-10">

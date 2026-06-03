@@ -45,7 +45,12 @@ const team = [
 
 export function TeamSection() {
   return (
-    <section id="team" className="bg-gradient-to-b from-beige/50 to-parchment dark:from-zinc-900 dark:to-zinc-950 py-24 md:py-32 relative overflow-hidden">
+    <section id="team" className="section-team section-rule-top py-24 md:py-32 relative overflow-hidden">
+      {/* Corner ambient glows */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="corner-glow corner-glow-tl h-[400px] w-[400px] bg-saffron/[0.06]" />
+        <div className="corner-glow corner-glow-br h-[360px] w-[360px] bg-gold/[0.05]" />
+      </div>
       {/* Decorative lotus glyphs */}
       <div className="pointer-events-none absolute top-10 right-10 text-saffron/5 text-9xl select-none">❀</div>
       <div className="pointer-events-none absolute bottom-10 left-10 text-saffron/5 text-9xl select-none">❀</div>

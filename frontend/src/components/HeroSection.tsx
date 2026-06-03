@@ -429,7 +429,7 @@ export function HeroSection() {
       ref={heroRef}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className="relative min-h-[100svh] overflow-hidden bg-gradient-to-b from-parchment via-parchment to-parchment-dark pt-28 pb-16 md:pt-32"
+      className="relative min-h-[100svh] overflow-hidden bg-gradient-to-b from-parchment via-parchment to-[var(--hero-to)] pt-28 pb-16 md:pt-32"
     >
       {/* Ambient blobs */}
       <div className="pointer-events-none absolute inset-0">
@@ -555,12 +555,6 @@ export function HeroSection() {
             variants={{ hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } } }}
             className="mt-6 flex flex-wrap justify-center gap-4 md:mt-8 md:justify-start"
           >
-            <MagneticButton
-              href="#events"
-              className="font-body inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-saffron to-saffron-deep px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_36px_rgba(224,120,44,0.45)] ring-1 ring-white/30 transition-shadow hover:shadow-[0_16px_48px_rgba(224,120,44,0.55)]"
-            >
-              Join the Club <span aria-hidden>✒</span>
-            </MagneticButton>
             <motion.div whileHover={reduced ? undefined : { y: -1 }} whileTap={reduced ? undefined : { scale: 0.99 }}>
               <a
                 href="#events"
