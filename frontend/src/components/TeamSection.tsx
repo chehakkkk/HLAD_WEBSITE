@@ -102,26 +102,7 @@ export function TeamSection() {
               </motion.article>
             </ScrollReveal>
           ))}
-        </div>
-
-        {/* Join team CTA — kept from v1 */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-16 text-center"
-        >
-          <div className="bg-gradient-to-r from-saffron/10 via-background/80 to-saffron/10 dark:from-saffron/10 dark:via-zinc-800/80 dark:to-saffron/10 p-12 rounded-3xl border border-white/70 dark:border-zinc-700/60 backdrop-blur-md shadow-[0_14px_44px_rgba(42,34,28,0.07)] dark:shadow-[0_14px_44px_rgba(0,0,0,0.3)]">
-            <h3 className="font-display text-3xl font-semibold text-foreground mb-4">Join Our Team</h3>
-            <p className="font-body text-muted-foreground mb-6 max-w-2xl mx-auto">
-              We're always looking for passionate individuals who want to contribute to the Hindi literary community.
-            </p>
-            <button className="font-body inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-saffron to-saffron-deep px-7 py-3.5 text-sm font-semibold text-white shadow-[0_12px_36px_rgba(224,120,44,0.35)] transition-shadow hover:shadow-[0_16px_48px_rgba(224,120,44,0.5)]">
-              View Opportunities
-            </button>
-          </div>
-        </motion.div>
+        </div>        
       </div>
     </section>
   );

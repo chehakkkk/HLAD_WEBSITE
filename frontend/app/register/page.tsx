@@ -173,10 +173,7 @@ export default function RegisterPage() {
 
             {/* Terms */}
             <p className="font-body text-xs text-charcoal-muted leading-relaxed">
-              By joining, you agree to our{" "}
-              <Link href="/terms" className="text-saffron hover:text-saffron-deep no-underline">Terms</Link>
-              {" "}and{" "}
-              <Link href="/privacy" className="text-saffron hover:text-saffron-deep no-underline">Privacy Policy</Link>.
+              By joining, you agree to our Terms and Privacy Policy
             </p>
 
             {/* Submit */}
@@ -192,13 +189,14 @@ export default function RegisterPage() {
           </form>
 
           {/* Divider */}
+          {/*
           <div className="my-6 flex items-center gap-3">
             <div className="h-px flex-1 bg-charcoal/10" />
             <span className="font-body text-xs text-charcoal-muted">या / or</span>
             <div className="h-px flex-1 bg-charcoal/10" />
           </div>
 
-          {/* Google */}
+          Google 
           <motion.button
             type="button"
             className="w-full flex items-center justify-center gap-2.5 rounded-xl border border-charcoal/15 dark:border-white/10 bg-white dark:bg-white/5 py-3 font-body text-sm font-medium text-charcoal dark:text-white/80 shadow-sm hover:border-charcoal/25 transition-all"
@@ -212,6 +210,7 @@ export default function RegisterPage() {
             </svg>
             Continue with Google
           </motion.button>
+*/}
         </motion.div>
 
         {/* Login link */}

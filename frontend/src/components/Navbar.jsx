@@ -65,7 +65,7 @@ export default function Navbar() {
           </div>
           <div className="hidden leading-tight sm:block">
             <span className="inline-block rounded-full bg-white/90 dark:bg-white/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-charcoal dark:text-white/80">
-              Since 2010
+              Since 2020
             </span>
             <div className="font-display text-base font-bold text-charcoal">HLAD</div>
             <div className="font-hindi text-xs font-medium text-saffron">हिंदी साहित्य</div>

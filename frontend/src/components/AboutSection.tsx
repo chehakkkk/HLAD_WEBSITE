@@ -1,133 +1,325 @@
 "use client";
 
-import { motion } from "motion/react";
-import { BookOpen, Users, Sparkles, Heart } from "lucide-react";
-import { ImageWithFallback } from "./shared/ImageWithFallback";
+import { motion, useInView, useMotionValue, useSpring, useTransform } from "motion/react";
+import { BookOpen, Users, Sparkles, Heart, Quote, Feather } from "lucide-react";
+import { useRef, useEffect } from "react";
 import ScrollReveal from "./ScrollReveal";
 
+/* ─── Animated counter ─────────────────────────────────────────── */
+function AnimatedNumber({ target, suffix = "" }: { target: number; suffix?: string }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const raw = useMotionValue(0);
+  const smooth = useSpring(raw, { stiffness: 60, damping: 18 });
+  const display = useTransform(smooth, (v) => `${Math.round(v)}${suffix}`);
+
+  useEffect(() => {
+    if (inView) raw.set(target);
+  }, [inView, target, raw]);
+
+  return <motion.span ref={ref}>{display}</motion.span>;
+}
+
+/* ─── Ink-brush SVG decoration ──────────────────────────────────── */
+function InkStroke({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 260 24" className={className} aria-hidden fill="none">
+      <path
+        d="M4 12 C40 4, 100 20, 130 12 S210 2, 256 12"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        opacity="0.35"
+        pathLength="1"
+      />
+    </svg>
+  );
+}
+
+/* ─── Quote card ────────────────────────────────────────────────── */
+const quotes = [
+  { text: "साहित्य समाज का दर्पण है।", attr: "— प्रेमचंद" },
+  { text: "कविता वो है जो दिल से निकले।", attr: "— मिर्ज़ा ग़ालिब" },
+];
+
+/* ─── Main Component ────────────────────────────────────────────── */
 export function AboutSection() {
   return (
-    <section id="about" className="relative overflow-hidden bg-gradient-to-b from-parchment-dark to-beige/60 py-24 md:py-32">
-      {/* Decorative blobs */}
-      <div className="pointer-events-none absolute right-0 top-0 h-[420px] w-[420px] translate-x-1/4 rounded-full bg-saffron/10 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 left-0 w-32 h-32 border-b-2 border-l-2 border-primary/20" />
-      <div className="pointer-events-none absolute top-0 right-0 w-32 h-32 border-t-2 border-r-2 border-primary/20" />
+    <section
+      id="about"
+      className="relative overflow-hidden bg-gradient-to-b from-parchment-dark via-parchment to-beige/60 py-28 md:py-36"
+    >
+      {/* ── Background atmosphere ── */}
+      <div className="pointer-events-none absolute inset-0">
+        {/* Warm light bleed top-right */}
+        <div className="absolute right-0 top-0 h-[480px] w-[480px] translate-x-1/3 -translate-y-1/4 rounded-full bg-saffron/10 blur-[100px]" />
+        {/* Deep amber bottom-left */}
+        <div className="absolute bottom-0 left-0 h-[320px] w-[320px] -translate-x-1/4 translate-y-1/4 rounded-full bg-primary/8 blur-[80px]" />
 
-      <div className="mx-auto max-w-6xl px-4 md:px-6">
-        {/* Section Header */}
+        {/* Faint ruled-paper lines */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <div
+            key={i}
+            className="absolute left-0 right-0 border-b border-primary/[0.035]"
+            style={{ top: `${80 + i * 96}px` }}
+          />
+        ))}
+
+        {/* Corner ornaments */}
+        <div className="absolute bottom-0 left-0 w-28 h-28 border-b-2 border-l-2 border-primary/20 rounded-bl-3xl" />
+        <div className="absolute top-0 right-0 w-28 h-28 border-t-2 border-r-2 border-primary/20 rounded-tr-3xl" />
+
+        {/* Scattered Devanagari glyphs */}
+        {["क", "ख", "ग", "घ", "ङ"].map((glyph, i) => (
+          <span
+            key={glyph}
+            className="absolute font-hindi text-6xl text-primary/[0.04] select-none"
+            style={{
+              top: `${10 + i * 18}%`,
+              left: `${5 + i * 18}%`,
+              transform: `rotate(${-15 + i * 8}deg)`,
+            }}
+          >
+            {glyph}
+          </span>
+        ))}
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-4 md:px-6">
+
+        {/* ── Section header ── */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center mb-20"
         >
-          <div className="inline-flex items-center gap-2 text-primary mb-4">
-            <div className="w-8 h-px bg-primary" />
-            <BookOpen className="w-6 h-6" />
-            <div className="w-8 h-px bg-primary" />
+          <div className="inline-flex items-center gap-3 text-saffron mb-5">
+            <div className="h-px w-10 bg-gradient-to-r from-transparent to-saffron" />
+            <Feather className="w-5 h-5" />
+            <span className="font-hindi text-sm tracking-widest uppercase">परिचय</span>
+            <Feather className="w-5 h-5 scale-x-[-1]" />
+            <div className="h-px w-10 bg-gradient-to-l from-transparent to-saffron" />
           </div>
-          <h2 className="text-4xl md:text-5xl font-display text-foreground mb-4">About HLAD</h2>
-          <p className="text-lg font-body text-muted-foreground max-w-2xl mx-auto">
+
+          <h2 className="text-5xl md:text-6xl font-display text-foreground mb-3 tracking-tight">
+            About <span className="text-primary italic">HLAD</span>
+          </h2>
+
+          <InkStroke className="w-48 text-saffron mx-auto my-4" />
+
+          <p className="text-lg font-body text-muted-foreground max-w-xl mx-auto">
             Where tradition meets contemporary expression
           </p>
         </motion.div>
 
-        {/* Two Column Layout */}
-        <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-start">
-          {/* Left Column — Visual card from v2 */}
-          <ScrollReveal>
-            <div className="relative flex min-h-[280px] items-center justify-center rounded-3xl border border-white/60 dark:border-zinc-700/60 bg-gradient-to-br from-parchment to-parchment-dark p-8 shadow-[0_24px_80px_rgba(42,34,28,0.08)]">
-              <svg viewBox="0 0 400 320" className="w-full max-w-md opacity-90" aria-hidden>
-                <defs>
-                  <linearGradient id="ink" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%"   stopColor="#8a7060" stopOpacity="0.5" />
-                    <stop offset="100%" stopColor="#e0782c" stopOpacity="0.35" />
-                  </linearGradient>
-                </defs>
-                <text
-                  x="50%"
-                  y="42%"
-                  textAnchor="middle"
-                  style={{ fontSize: 72, fill: "url(#ink)", fontFamily: "Noto Serif Devanagari, serif" }}
-                >
-                  साहित्य
-                </text>
-                <path d="M40 260 Q200 200 360 260" stroke="#c9a227" strokeWidth="1.5" fill="none" opacity="0.5" />
-                <path d="M60 80 L340 80" stroke="#2a221c" strokeOpacity="0.08" strokeWidth="1" />
-                <path d="M60 240 L340 240" stroke="#2a221c" strokeOpacity="0.08" strokeWidth="1" />
-              </svg>
-              <motion.div
-                className="absolute bottom-6 left-6 rounded-xl border border-white/70 dark:border-zinc-700/70 bg-white/80 dark:bg-zinc-800/80 px-4 py-2 font-hindi text-sm font-semibold text-saffron shadow-lg backdrop-blur-md"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-              >
-                रचना • संस्कृति • समुदाय
-              </motion.div>
-            </div>
+        {/* ── Two-column layout ── */}
+        <div className="grid md:grid-cols-2 gap-14 md:gap-20 items-start">
 
-            {/* Stats from v1 */}
-            <div className="mt-6 bg-secondary text-secondary-foreground p-8 rounded-2xl shadow-lg">
-              <div className="grid grid-cols-3 gap-6 text-center">
-                <div>
-                  <div className="text-3xl md:text-4xl mb-2 font-display">500+</div>
-                  <div className="text-sm text-secondary-foreground/80">Members</div>
-                </div>
-                <div>
-                  <div className="text-3xl md:text-4xl mb-2 font-display">100+</div>
-                  <div className="text-sm text-secondary-foreground/80">Events</div>
-                </div>
-                <div>
-                  <div className="text-3xl md:text-4xl mb-2 font-display">50+</div>
-                  <div className="text-sm text-secondary-foreground/80">Publications</div>
-                </div>
+          {/* ══ Left column ══════════════════════════════════════════ */}
+          <ScrollReveal>
+            <div className="space-y-6">
+
+              {/* Hero visual card */}
+              <div className="relative flex min-h-[300px] items-center justify-center rounded-3xl border border-white/60 bg-gradient-to-br from-parchment to-parchment-dark p-8 shadow-[0_32px_80px_rgba(42,34,28,0.12)] overflow-hidden">
+                {/* Subtle paper texture overlay */}
+                <div className="absolute inset-0 opacity-[0.03] bg-[repeating-linear-gradient(45deg,#2a221c_0px,#2a221c_1px,transparent_1px,transparent_8px)]" />
+
+                <svg viewBox="0 0 440 300" className="relative w-full max-w-md" aria-hidden>
+                  <defs>
+                    <linearGradient id="inkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#8a7060" stopOpacity="0.55" />
+                      <stop offset="100%" stopColor="#e0782c" stopOpacity="0.4" />
+                    </linearGradient>
+                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#c9a227" stopOpacity="0" />
+                      <stop offset="50%" stopColor="#c9a227" stopOpacity="0.6" />
+                      <stop offset="100%" stopColor="#c9a227" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* Main Devanagari word */}
+                  <text
+                    x="50%" y="44%"
+                    textAnchor="middle"
+                    style={{ fontSize: 80, fill: "url(#inkGrad)", fontFamily: "Noto Serif Devanagari, serif" }}
+                  >
+                    साहित्य
+                  </text>
+
+                  {/* Subtitle */}
+                  <text
+                    x="50%" y="65%"
+                    textAnchor="middle"
+                    style={{ fontSize: 22, fill: "#8a7060", fontFamily: "Noto Serif Devanagari, serif", opacity: 0.6 }}
+                  >
+                    Hindi Literature & Debating Club
+                  </text>
+
+                  {/* Decorative ruled lines */}
+                  <line x1="60" y1="90" x2="380" y2="90" stroke="url(#lineGrad)" strokeWidth="1" />
+                  <line x1="60" y1="240" x2="380" y2="240" stroke="url(#lineGrad)" strokeWidth="1" />
+
+                  {/* Ornamental curves */}
+                  <path d="M60 265 Q220 210 380 265" stroke="#c9a227" strokeWidth="1.5" fill="none" opacity="0.45" />
+                  <path d="M80 270 Q220 222 360 270" stroke="#c9a227" strokeWidth="0.8" fill="none" opacity="0.2" />
+
+                  {/* Dot accents */}
+                  <circle cx="60" cy="90" r="3" fill="#c9a227" opacity="0.5" />
+                  <circle cx="380" cy="90" r="3" fill="#c9a227" opacity="0.5" />
+                  <circle cx="60" cy="240" r="3" fill="#c9a227" opacity="0.5" />
+                  <circle cx="380" cy="240" r="3" fill="#c9a227" opacity="0.5" />
+                </svg>
+
+                {/* Floating tag */}
+                <motion.div
+                  className="absolute bottom-6 left-6 rounded-xl border border-white/70 bg-white/80 px-4 py-2 font-hindi text-sm font-semibold text-saffron shadow-lg backdrop-blur-md"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.3 }}
+                >
+                  रचना • संस्कृति • समुदाय
+                </motion.div>
+
+                {/* Year badge */}
+                <motion.div
+                  className="absolute top-5 right-5 rounded-full border border-primary/30 bg-parchment/90 px-3 py-1 text-xs font-body font-medium text-primary/70 backdrop-blur-sm"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 }}
+                >
+                  Est. 2020
+                </motion.div>
               </div>
+
+              {/* Animated stats bar */}
+              <div className="bg-secondary text-secondary-foreground rounded-2xl shadow-lg overflow-hidden">
+                <div className="grid grid-cols-3 divide-x divide-white/10">
+                  {[
+                    { value: 500, suffix: "+", label: "Members", hindiLabel: "सदस्य" },
+                    { value: 100, suffix: "+", label: "Events", hindiLabel: "कार्यक्रम" },
+                    { value: 50,  suffix: "+", label: "Publications", hindiLabel: "प्रकाशन" },
+                  ].map(({ value, suffix, label, hindiLabel }, i) => (
+                    <motion.div
+                      key={label}
+                      className="flex flex-col items-center py-7 px-4 text-center group"
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.1 * i, duration: 0.5 }}
+                    >
+                      <div className="text-3xl md:text-4xl font-display text-saffron mb-0.5">
+                        <AnimatedNumber target={value} suffix={suffix} />
+                      </div>
+                      <div className="text-sm font-body text-secondary-foreground/80">{label}</div>
+                      <div className="text-xs font-hindi text-secondary-foreground/50 mt-0.5">{hindiLabel}</div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Progress-bar accent */}
+                <motion.div
+                  className="h-0.5 bg-gradient-to-r from-saffron/0 via-saffron/60 to-saffron/0"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 1.2, ease: "easeOut" }}
+                />
+              </div>
+              
             </div>
           </ScrollReveal>
 
-          {/* Right Column — v2 text + v1 offerings */}
+          {/* ══ Right column ═════════════════════════════════════════ */}
           <ScrollReveal delay={0.08}>
             <div className="space-y-8">
-              {/* Heritage text from v2 */}
+
+              {/* Heritage narrative */}
               <div>
-                <p className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-saffron">About HLAD</p>
-                <h3 className="font-display mt-3 text-3xl font-semibold tracking-tight text-charcoal md:text-4xl">
+                <p className="font-body text-xs font-semibold uppercase tracking-[0.22em] text-saffron">
+                  Our Story
+                </p>
+                <h3 className="font-display mt-3 text-3xl md:text-4xl font-semibold tracking-tight text-charcoal">
                   Our Heritage
                 </h3>
-                <p className="font-body mt-6 text-base leading-relaxed text-charcoal-muted md:text-lg">
-                  Founded in 2020, HLAD has been a beacon for Hindi literature enthusiasts—curating workshops, open
-                  mics, manuscript circles, and digital archives that honour classical voices while welcoming
+                <InkStroke className="w-32 text-saffron mt-2 mb-5" />
+
+                <p className="font-body text-base md:text-lg leading-relaxed text-charcoal-muted">
+                  Founded in 2020, HLAD has been a beacon for Hindi literature enthusiasts—curating workshops,
+                  open mics, manuscript circles, and digital archives that honour classical voices while welcoming
                   contemporary expression.
                 </p>
-                <p className="font-hindi mt-5 text-lg leading-relaxed text-charcoal">
+                <p className="font-hindi mt-5 text-lg leading-relaxed text-charcoal/80">
                   हिंदी साहित्य की सृजनात्मक परंपरा को आधुनिक दृष्टि से जोड़ना हमारा उद्देश्य है।
                 </p>
               </div>
 
-              {/* What We Offer from v1 */}
-              <div className="bg-card p-8 rounded-2xl shadow-lg border border-primary/20">
-                <h3 className="text-xl font-display text-foreground mb-6">What We Offer</h3>
-                <div className="space-y-5">
+              {/* What We Offer — enhanced cards */}
+              <div className="rounded-2xl border border-primary/20 bg-card shadow-lg overflow-hidden">
+                <div className="px-7 pt-7 pb-4 border-b border-primary/10">
+                  <h3 className="text-xl font-display text-foreground">What We Offer</h3>
+                  <p className="text-xs font-hindi text-saffron mt-0.5">हमारी सेवाएँ</p>
+                </div>
+
+                <div className="divide-y divide-primary/8">
                   {[
-                    { icon: BookOpen, title: "Literary Workshops", desc: "Master the art of Hindi poetry and prose with expert guidance" },
-                    { icon: Users, title: "Community Events", desc: "Connect with fellow literature enthusiasts at our regular meetups" },
-                    { icon: Sparkles, title: "Poetry Slams", desc: "Showcase your talent in our vibrant open-mic sessions" },
-                    { icon: Heart, title: "Cultural Preservation", desc: "Archiving and celebrating the timeless works of Hindi masters" },
-                  ].map(({ icon: Icon, title, desc }) => (
-                    <div key={title} className="flex gap-4">
-                      <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                    {
+                      icon: BookOpen,
+                      title: "Literary Workshops",
+                      hindi: "साहित्यिक कार्यशालाएँ",
+                      desc: "Master the art of Hindi poetry and prose with expert guidance.",
+                      accent: "from-amber-500/10 to-saffron/5",
+                    },
+                    {
+                      icon: Users,
+                      title: "Community Events",
+                      hindi: "सामुदायिक कार्यक्रम",
+                      desc: "Connect with fellow literature enthusiasts at our regular meetups.",
+                      accent: "from-primary/10 to-primary/5",
+                    },
+                    {
+                      icon: Sparkles,
+                      title: "Poetry Slams",
+                      hindi: "काव्य प्रतियोगिताएँ",
+                      desc: "Showcase your talent in our vibrant open-mic sessions.",
+                      accent: "from-saffron/10 to-amber-400/5",
+                    },
+                    {
+                      icon: Heart,
+                      title: "Cultural Preservation",
+                      hindi: "सांस्कृतिक संरक्षण",
+                      desc: "Archiving and celebrating the timeless works of Hindi masters.",
+                      accent: "from-rose-400/10 to-primary/5",
+                    },
+                  ].map(({ icon: Icon, title, hindi, desc, accent }, i) => (
+                    <motion.div
+                      key={title}
+                      className="group flex gap-4 px-7 py-5 hover:bg-primary/[0.03] transition-colors duration-200"
+                      initial={{ opacity: 0, x: 16 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.08 * i, duration: 0.45 }}
+                    >
+                      <div
+                        className={`flex-shrink-0 w-11 h-11 bg-gradient-to-br ${accent} rounded-xl flex items-center justify-center border border-primary/10 group-hover:scale-105 transition-transform duration-200`}
+                      >
                         <Icon className="w-5 h-5 text-primary" />
                       </div>
                       <div>
-                        <h4 className="text-base font-display text-foreground mb-1">{title}</h4>
-                        <p className="text-sm text-muted-foreground font-body">{desc}</p>
+                        <div className="flex items-baseline gap-2">
+                          <h4 className="text-base font-display text-foreground">{title}</h4>
+                          <span className="text-xs font-hindi text-saffron/70 hidden sm:inline">{hindi}</span>
+                        </div>
+                        <p className="text-sm text-muted-foreground font-body mt-0.5 leading-relaxed">{desc}</p>
                       </div>
-                    </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>
+
             </div>
           </ScrollReveal>
         </div>
